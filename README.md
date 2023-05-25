@@ -22,7 +22,7 @@ home page: https://winerysa.netlify.app/pages/
 <table>
   <tbody>
     <tr>
-      <td align="center" valign="top" width="14.28%"><a href="https://github.com/NicholasJHarvey"><img src="https://avatars.githubusercontent.com/u/43268664?v=4?s=100" width="100px;" alt="NicholasJHarvey"/><br /><sub><b>NicholasJHarvey</b></sub></a><br /><a href="#design-NicholasJHarvey" title="Design">🎨</a></td>
+      <td align="center" valign="top" width="14.28%"><a href="https://github.com/NicholasJHarvey"><img src="https://avatars.githubusercontent.com/u/43268664?v=4?s=100" width="100px;" alt="NicholasJHarvey"/><br /><sub><b>NicholasJHarvey</b></sub></a><br /><a href="#design-NicholasJHarvey" title="Design">🎨</a> <a href="https://github.com/waveyboym/COS221-PA5/commits?author=NicholasJHarvey" title="Code">💻</a> <a href="https://github.com/waveyboym/COS221-PA5/issues?q=author%3ANicholasJHarvey" title="Bug reports">🐛</a></td>
     </tr>
   </tbody>
 </table>
