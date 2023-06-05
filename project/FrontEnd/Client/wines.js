@@ -169,6 +169,55 @@ $(document).ready(function(){
         xhr.send(JSON.stringify(body));
     })
 
+    $("#CountrySelect").on("change",function(){
+        var Option = $(this).val();
+        var Country = ''
+        switch (Option) {
+            case "1":
+                Country = "Italy";
+                break;
+            case "2":
+                Country = "South Africa";
+                break;
+            case "3":
+                Country = "France";
+                break;
+            case "4":
+                Country = "Germany";
+                break;
+            case "5":
+                Country = "Spain";
+                break;
+            case "6":
+                Country = "Portugal";
+                break;
+            case "7":
+                Country = "Russia";
+                break;
+            case "8":
+                Country = "Turkey";
+                break;
+        
+        }
+        var Sbody = {
+            type : "GET_WINE",
+            filters : { country : Country}
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+        {
+            if(this.readyState== 4 && this.status == 200)
+            {
+                document.querySelector(".website-container").innerHTML = "";
+                placeWineElements(this.responseText);
+            }
+        }
+
+        xhr.open("POST","../../Backend/Api/Api.php")
+        xhr.send(JSON.stringify(Sbody));
+
+    })
+
 })
 
 function KnowFilter(str)
@@ -181,7 +230,7 @@ function KnowFilter(str)
             filters : {colour : str}
         }
     }
-    else if(str == "Bone Dry" || "Sparkling")
+    else if(str == "Bone Dry" || str == "Sparkling")
     {
         Pbody = {
             type : "GET_WINE",
