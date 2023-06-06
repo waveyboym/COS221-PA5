@@ -62,6 +62,7 @@ enum ERRORTYPES: string
     case EMAILTAKEN = 'Email is unavailable';//Email is unavailable
     case INCORRECTSORT = 'Given sort value is not supported';//unsupported sort parameter given
     case NONAME = 'Name is a required field';//no name given for search
+    case ISMANAGER = 'Manager cannot login as a tourist';//Manager cannot login as a tourist
     /**Add more cases */
 }
 
@@ -98,13 +99,27 @@ class Api extends config{
         }*/
 
         $conn = $this->connectToDatabase();
-        $stmt = $conn->prepare('SELECT username FROM user WHERE email = ? AND Password = ?');
+        $stmt = $conn->prepare('SELECT username, userID FROM user WHERE email = ? AND Password = ?');
         
         $hashedPass = hash("sha256", $UserPassword, false);
 
         $success = $stmt->execute(array($UserEmail, $hashedPass));
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($success && $stmt->rowCount() != 0){
+            $stmt2 = $conn->prepare('SELECT userID FROM tourist WHERE userID = ?');
+            $userID = $row['userID'];
+        
+            $success = $stmt2->execute(array($userID));
+
+            if($success && $stmt2->rowCount() != 0){
+                return $this->constructResponseObject($stmt->fetchAll(), "success");
+            }
+            else{
+                return $this->constructResponseObject(ERRORTYPES::ISMANAGER->value, "error");
+            }
+            
+
             return $this->constructResponseObject($stmt->fetchAll(), "success");
         }
         else{
