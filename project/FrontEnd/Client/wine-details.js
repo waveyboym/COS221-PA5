@@ -82,39 +82,29 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
                     <br>
                     <br>
                     <!-- ----------------------------Beginning Review------------------------------------- -->
-                    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#newReviewModal">
-                        Add Review
-                    </button>
-                    
-                    <!-- Modal -->
-                    <div class="modal fade" id="newReviewModal" tabindex="-1" role="dialog" aria-labelledby="newReviewModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="newReviewModalLabel">Write a Review</h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <form>
-                                        <div class="form-group">
-                                        <label for="newReviewText">Review:</label>
-                                        <textarea class="form-control" id="newReviewText" rows="3" required></textarea>
-                                        </div>
-                                        <div class="form-group">
-                                        <label for="newPointScore">Point Score (50-100):</label>
-                                        <input type="number" class="form-control" id="newPointScore" min="50" max="100" required>
-                                        </div>
-                                    </form>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary">Submit</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Launch demo modal
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        ...
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Save changes</button>
+      </div>
+    </div>
+  </div>
+</div>
                     <!-- ----------------------------End Review--------------------------------- -->
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
@@ -126,6 +116,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
     xhttpObject.setRequestHeader("Content-type", "application/json");
     xhttpObject.send(body);
 }
+
 // Updating the Wine Details
 getWineDetails();
 
@@ -233,9 +224,9 @@ const starGeneration = function(points){
     }
 };
 
-var addReviewButton = document.querySelector('.btn-primary');
-var reviewModal = document.querySelector('#reviewModal');
+// var addReviewButton = document.querySelector('.btn-primary');
+// var reviewModal = document.querySelector('#reviewModal');
 
-addReviewButton.addEventListener('click', function() {
-    reviewModal.classList.add('show');
-});
+// addReviewButton.addEventListener('click', function() {
+//     reviewModal.classList.add('show');
+// });
