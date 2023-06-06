@@ -124,6 +124,11 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief handles the logging in of the admin to the backend by checking if they exist on the database, and checking that the key matches and setting session variables
+    *@param $AdminKey secret key of admin
+    *@return string
+    */
     public function loginAdmin($AdminKey){
         $conn = $this->connectToDataBase();
         $stmt = $conn->prepare("SELECT adminkey FROM admin WHERE adminkey = ?;");
@@ -139,6 +144,12 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief handles the logging in of the manager to the backend by checking if they exist on the database and setting session variables
+    *@param $ManagerUsername username of manager
+    *@param $ManagerPassword password of manager
+    *@return string
+    */
     public function loginManager($ManagerUsername, $ManagerPassword){
         $conn = $this->connectToDataBase();
         $stmt = $conn->prepare("SELECT userID, username FROM user WHERE email = ? AND Password = ?");
@@ -164,21 +175,35 @@ class Api extends config{
                     }
                 }
                 else{
-                    $this->constructResponseObject("Database connection has failed or no manager exists", "error");
+                    return $this->constructResponseObject("Database connection has failed or no manager exists", "error");
                 }
             }
+            return $this->constructResponseObject("Database connection has failed or no manager exists", "error");
         }
         else{
             return $this->constructResponseObject("Database connection has failed or no manager exists", "error");
         }
     }
 
+    /**
+    *@brief Logs out a user by destroying their sessions
+    *@param $none
+    *@return void
+    */
     public function logout(){
         session_start();
         session_unset();
         session_destroy();
     }
 
+    /**
+    *@brief Creates a new user on the backend
+    *@param $Username username of a new user
+    *@param $email email of a user
+    *@param $pswrd password of a user
+    *@param $isSouthAfrican whether or not the user is a south african tourist
+    *@return void
+    */
     public function registerUser($Username, $email, $pswrd, $isSouthAfrican){
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
             return $this->constructResponseObject(ERRORTYPES::INVALIDEMAIL->value, "error");
@@ -220,6 +245,11 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Deletes a user from the database
+    *@param $Username username of the user
+    *@return string
+    */
     public function deleteUser($username){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('DELETE FROM user WHERE username = ?');
@@ -233,6 +263,12 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Updates the old username to the new username in the database
+    *@param $CurrUsername current username of the user
+    *@param $NewUsername new username to set user to
+    *@return string
+    */
     public function updateUsername($CurrUsername, $NewUsername){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT * FROM user WHERE username = ?"); //Check if username is taken
@@ -254,6 +290,12 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Updates the password to the new password in the database of the passed in username
+    *@param $username current username of the user
+    *@param $newPswrd new username to set user to
+    *@return string
+    */
     public function updatePassword($username, $newPswrd){
         if(!preg_match("/^(?=.*[A-Za-z])[0-9A-Za-z!@#$%^&*?><.,;:]{8,}$/", $newPswrd)){
             return $this->constructResponseObject(ERRORTYPES::INVALIDPASSWORD->value, "error");
@@ -283,6 +325,11 @@ class Api extends config{
             }
     }
 
+    /**
+    *@brief Gets all of the reviews made by this user
+    *@param $username current username of the user
+    *@return string
+    */
     public function getUserReviews($username){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('SELECT reviewID ,review_description, points  FROM review JOIN user ON userID = reviewer_userID WHERE username = ?');
@@ -299,6 +346,11 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Gets the review count, which is the number of reviews made by this user
+    *@param $username current username of the user
+    *@return string
+    */
     public function getReviewCount($username){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('SELECT COUNT(*)  FROM review JOIN user ON userID = reviewer_userID WHERE username = ?');
@@ -313,6 +365,15 @@ class Api extends config{
     }
 
 // Function will need further editing as I am unsure how the wineID info will be procured from client-side
+
+    /**
+    *@brief Gets the review count, which is the number of reviews made by this user
+    *@param $points the points for this review created by the user
+    *@param $review the review text made by the user
+    *@param $username the username of the user
+    *@param $wineID id of the wine
+    *@return string
+    */
     public function insertReview($points, $review, $username, $wineID){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('INSERT INTO review(points, review_description, reviewer_userID, wineID) SELECT ?, ?, userID, ? FROM  user WHERE username = ?');
@@ -326,6 +387,12 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Updates the review on the database
+    *@param $review the review text made by the user
+    *@param $reviewID id of the review
+    *@return string
+    */
     public function updateReview($review, $reviewID){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('UPDATE review SET review_description = ? WHERE reviewID = ?');
@@ -339,6 +406,11 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Deletes the review on the database
+    *@param $reviewID id of the review
+    *@return string
+    */
     public function deleteReview($reviewID){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('DELETE FROM review WHERE reviewID = ?');
@@ -353,6 +425,11 @@ class Api extends config{
     }
 
      // * Get Wine Reviews
+    /**
+    *@brief Get all reviews of this wine
+    *@param $wineID id of the wine
+    *@return string
+    */
      public function getWineReviews($wineID){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare('SELECT reviewID ,review_description, points, username FROM review JOIN user ON userID = reviewer_userID WHERE wineID = ?');
@@ -369,6 +446,11 @@ class Api extends config{
         }
     }
 
+    /**
+    *@brief Gets varietals from database
+    *@param $none
+    *@return string
+    */
     public function getVarietals(){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT varietal FROM wine GROUP BY varietal");
@@ -377,6 +459,11 @@ class Api extends config{
         return $this->constructResponseObject($data, "success");
     }
 
+    /**
+    *@brief Gets countries from database
+    *@param $none
+    *@return string
+    */
     public function getCountries(){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT country FROM country");
@@ -385,6 +472,11 @@ class Api extends config{
         return $this->constructResponseObject($data, "success");
     }
 
+    /**
+    *@brief Gets wines from database based on sorts, location or regions
+    *@param $USERREQUEST an object from the frontend
+    *@return string
+    */
     public function getWines($USERREQUEST){
 
         $pagesize = 10;
@@ -474,6 +566,12 @@ class Api extends config{
   
     }
 
+    /**
+    *@brief Searches for a wine based on the passed in parameter. Finds similarities
+    *@param $name name of the wine
+    *@param $lastcount = 0 the last served id of wine requests
+    *@return string
+    */
     public function searchWine($name, $lastcount = 0){
 
         $pagesize = 10;
@@ -500,6 +598,11 @@ class Api extends config{
         return $this->constructResponseObject($data, "success", $lastcount + $pagesize);
     }
 
+    /**
+    *@brief Gets the data of the specific wine id that is passed in
+    *@param $id id of wine
+    *@return string
+    */
     public function openWine($id){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT * FROM winery JOIN location ON winery_locationID = location.locationID JOIN region ON location.regionID = region.regionID WHERE region.country LIKE 'South Africa' AND winery.wineryID = ?");
@@ -517,6 +620,11 @@ class Api extends config{
         return $this->constructResponseObject("", "success");
     }
 
+    /**
+    *@brief Gets the data of the specific wine id that is passed in
+    *@param $req_info an object from the frontend
+    *@return string
+    */
     public function getWineries($req_info){
 
         if(isset($req_info->filtercountry)){
@@ -537,6 +645,11 @@ class Api extends config{
         
     }    
 
+    /**
+    *@brief Searches for a winery base don the name and finds similarities
+    *@param $name name of winery
+    *@return string
+    */
     public function searchWinery($name){
 
         if(!isset($name))return $this->constructResponseObject(ERRORTYPES::NONAME->value, "error");
@@ -554,6 +667,11 @@ class Api extends config{
         return $this->constructResponseObject($data, "success");
     }
 
+    /**
+    *@brief Gets data related to this winery ID
+    *@param $id  id of winery
+    *@return string
+    */
     public function getWinery($id){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT * FROM winery JOIN location ON winery_locationID = location.locationID JOIN region ON location.regionID = region.regionID WHERE winery.wineryID = ?");
@@ -578,6 +696,11 @@ class Api extends config{
         return $this->constructResponseObject("", "success");
     }
 
+    /**
+    *@brief Loads more wines by increasing the limit
+    *@param $none
+    *@return string
+    */
     public function loadMoreWines(){
         session_start();
         $conn = $this->connectToDatabase();
@@ -591,6 +714,11 @@ class Api extends config{
         return $this->constructResponseObject($wines, "success");
     }
 
+    /**
+    *@brief Gets data related to the currently logged in Manager
+    *@param $last_id = 0 last_id of wine loaded on managers page
+    *@return string
+    */
     public function loadManagersData($last_id = 0){
         session_start();
         $managerkey = $_SESSION["managerkey"];
@@ -668,6 +796,12 @@ class Api extends config{
 
     }
 
+    /**
+    *@brief Gets data related to the currently logged in Admin
+    *@param $type REQUESTYPE made by the user
+    *@param $last_id = 0 last_id of wineries or managers loaded on admin page
+    *@return string
+    */
     public function getWineriesORManagersAdmin($type, $last_id = 0){
         session_start();
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
@@ -727,12 +861,32 @@ class Api extends config{
         return $this->constructResponseObject($data, "success");
     }
 
+    /**
+    *@brief allows an admin to access a manager or a specific wineries page
+    *@param $managerID id of manager
+    *@return string
+    */
     public function openManagersPage($managerID){
         session_start();
         $_SESSION['managerkey'] = $managerID;
         return $this->constructResponseObject("", "success");
     }
 
+    /**
+    *@brief allows an admin to add a winery
+    *@param $wineryName name of winery
+    *@param $wineryImageURL image url of winery
+    *@param $wineryWebsiteURL website url of winery
+    *@param $location location of winery
+    *@param $country country of winery
+    *@param $longitude longitude of winery
+    *@param $latitude latitude of winery
+    *@param $region region of winery
+    *@param $wineryManagerID manager id of winery
+    *@param $isverified verification status of winery
+    *@param $description description of winery
+    *@return string
+    */
     public function addWineryAdmin($wineryName, $wineryImageURL, $wineryWebsiteURL, 
         $location, $country, $longitude, $latitude, $region, $wineryManagerID, $isverified, $description){
         session_start();
@@ -845,6 +999,11 @@ class Api extends config{
         else return $this->constructResponseObject("Added new winery", "success");
     }
 
+    /**
+    *@brief deletes a winery from the backend
+    *@param $id id of winery
+    *@return string
+    */
     public function deleteWineryAdmin($id){
         session_start();
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
@@ -864,6 +1023,22 @@ class Api extends config{
         return $this->constructResponseObject("deleted winery", "success");
     }
 
+    /**
+    *@brief allows a manager to add a wine
+    *@param $wine_name wine_name of winery
+    *@param $varietal varietal of winery
+    *@param $carbonation carbonation of winery
+    *@param $sweetness sweetness of winery
+    *@param $colour colour of winery
+    *@param $vintage vintage of winery
+    *@param $year_bottled year_bottled of winery
+    *@param $wine_imageURL wine_imageURL of winery
+    *@param $pointScore pointScore of winery
+    *@param $currency currency of wine
+    *@param $price_amount price_amount of wine
+    *@param $alcohol_percentage alcohol_percentage of wine
+    *@return string
+    */
     public function addWine($wine_name, $varietal, $carbonation, $sweetness, $colour, 
         $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
             session_start();
@@ -889,6 +1064,22 @@ class Api extends config{
  
     }
 
+    /**
+    *@brief allows a manager to edit a wine
+    *@param $wine_name wine_name of winery
+    *@param $varietal varietal of winery
+    *@param $carbonation carbonation of winery
+    *@param $sweetness sweetness of winery
+    *@param $colour colour of winery
+    *@param $vintage vintage of winery
+    *@param $year_bottled year_bottled of winery
+    *@param $wine_imageURL wine_imageURL of winery
+    *@param $pointScore pointScore of winery
+    *@param $currency currency of wine
+    *@param $price_amount price_amount of wine
+    *@param $alcohol_percentage alcohol_percentage of wine
+    *@return string
+    */
     public function editWine($wineID, $wine_name, $varietal, $carbonation, $sweetness, $colour, 
         $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
             session_start();
@@ -967,6 +1158,11 @@ class Api extends config{
             return $this->constructResponseObject("", "success");
     }
 
+    /**
+    *@brief deletes a wine from the backend
+    *@param $id id of wine
+    *@return string
+    */
     public function deleteWine($id){
         session_start();
         $managerkey = $_SESSION["managerkey"];
@@ -1007,6 +1203,9 @@ class Api extends config{
 */
 $apiconfig = api::instance();
 
+/**
+*@brief hanldes all POST requests
+*/
 if($_SERVER["REQUEST_METHOD"] == "POST"){
     $json = file_get_contents('php://input');
     $USERREQUEST = json_decode($json);
@@ -1099,6 +1298,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     else echo $json;
 }
+/**
+*@brief hanldes all GET requests
+*/
 else if($_SERVER["REQUEST_METHOD"] == "GET"){
     if($_GET['type'] == REQUESTYPE::GET_WINERY_ADMIN->value){
         echo $apiconfig->getWineriesORManagersAdmin(REQUESTYPE::GET_WINERY_ADMIN->value, isset($_GET['last_id']) ? $_GET['last_id'] : 0);
