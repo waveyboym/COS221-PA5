@@ -118,7 +118,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
 }
 
 // Updating the Wine Details
-getWineDetails();
+//getWineDetails();
 
 // onSubmit
 

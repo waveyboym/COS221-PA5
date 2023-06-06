@@ -1,5 +1,6 @@
 var req = new XMLHttpRequest();
 let currentlySelectedReviewID = 0;
+let count = 1;
 var username;
 
 req.onreadystatechange = function() {
@@ -20,7 +21,7 @@ req.onreadystatechange = function() {
 
         for (var i in jRes.data) {
           reviewOutput += '<tr>' +
-                            '<th scope="row">' + jRes.data[i].reviewID + '</th>'+
+                            '<th scope="row">' + count + '</th>'+
                             '<td>' + jRes.data[i].review_description + '</td>'+
                             '<td>' + starGeneration(jRes.data[i].points) + '</td>'+
                             '<th scope="row action-btns">'+
@@ -34,6 +35,7 @@ req.onreadystatechange = function() {
                               '</div>' +
                             '</th>'+
                           '</tr>';
+          ++count;
         }
 
         setReviewCount();
