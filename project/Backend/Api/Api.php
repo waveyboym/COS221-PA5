@@ -202,7 +202,7 @@ class Api extends config{
     *@param $email email of a user
     *@param $pswrd password of a user
     *@param $isSouthAfrican whether or not the user is a south african tourist
-    *@return void
+    *@return string
     */
     public function registerUser($Username, $email, $pswrd, $isSouthAfrican){
         if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
@@ -235,6 +235,9 @@ class Api extends config{
                     $success = $stmt->execute(array($isSouthAfrican));
                     return $this->constructResponseObject("", "success");
                 }
+                else{
+                    return $this->constructResponseObject("Failed to insert new user", "error");
+                }    
             }
             else{
                 return $this->constructResponseObject(ERRORTYPES::EMAILTAKEN->value, "error");
