@@ -118,9 +118,6 @@ class Api extends config{
             else{
                 return $this->constructResponseObject(ERRORTYPES::ISMANAGER->value, "error");
             }
-            
-
-            return $this->constructResponseObject($stmt->fetchAll(), "success");
         }
         else{
             return $this->constructResponseObject(ERRORTYPES::NULLUSER->value, "error");
