@@ -48,44 +48,63 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
             var response = JSON.parse(xhttpObject.responseText);
             var data = response.data[0];
             
-            document.getElementById('add_wine').innerHTML = `<div class="card mb-3 card-info-container" style="margin-top: 50px; padding: 100px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img id="image_wine" style="height: 800px; width:fit-content; padding: 20px; padding-left:150px; padding-right:150px;"  class="card-img-top" src="${data.wine_imageURL}" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                    <h5 id="Wine_Name" class="card-title">${data.wine_name}</h5>
-                    <p class="card-text">The Under Oaks Chenin Blanc 2016 is a bright and shiny wine, with has a pale straw-yellow colour. The wine is well balanced, full flavoured and displays strong notes of guava and tropical fruit salad on the nose and palate. It has a good acidity and a long fruity aftertaste.  Although it is very full-bodied this Chenin Blanc is soft on the palate and a pleasure to drink.</p>
-                    <br>
-                    <li id="Winery" class="card-text" onclick="searchFor('${data.winery_name}')" style="cursor: pointer; color: black;" onmouseover="this.style.color='blue';" onmouseout="this.style.color='black';"><i class="fa-solid fa-map-pin"></i> &nbsp; &nbsp; <strong>Winery:</strong> &nbsp; ${data.winery_name}</li>
-                    <hr>
-                    <li id="Varietal" class="card-text"><i class="fa-solid fa-circle-notch"></i> &nbsp; <strong>Varietal:</strong> &nbsp; ${data.varietal}</li>
-                    <hr>
-                    <li id="Carbonation" class="card-text"><i class="fa-solid fa-cubes-stacked"> &nbsp;&nbsp; </i><strong>Carbonation:</strong> &nbsp; ${data.carbonation}</li>
-                    <hr>
-                    <li id="Sweetness" class="card-text">&nbsp;<i class="fa-solid fa-wine-glass"></i>&nbsp; &nbsp; <strong>Sweetness:</strong> &nbsp; ${data.sweetness}</li>
-                    <hr>
-                    <li id="Colour" class="card-text"> <i class="fa-solid fa-palette"></i> &nbsp; <strong>Colour:</strong> &nbsp; ${data.colour}</li>
-                    <hr>
-                    <li id="Vintage" class="card-text"><i class="fa-regular fa-calendar"></i> &nbsp; <strong>Vintage:</strong> ${data.vintage}</li>
-                    <hr>
-                    <li id="Year_Bottled" class="card-text"><i class="fa-regular fa-calendar"></i> &nbsp; <strong>Year Bottled:</strong> &nbsp; ${data.year_bottled}</li>
-                    <hr>
-                    <li id="Regions" class="card-text"><i class="fa-solid fa-earth-americas"></i> &nbsp; <strong>Region:</strong> &nbsp; ${data.region},&nbsp; ${data.country}</li>
-                    <hr>
-                    <li id="Price" class="card-text"><i class="fa-solid fa-money-bill"></i> &nbsp; <strong>Price:</strong> &nbsp; ${data.price_amount} ${data.currency}</li>
-                    <hr>
-                    <li id="Alcohol" class="card-text"><i class="fa-solid fa-percent"></i> &nbsp; &nbsp; <strong>Alcohol:</strong> ${data.alcohol_percentage}%</li>
-                    <hr>
-                    <li id="Address" class="card-text"><i class="fa-solid fa-location-dot"></i> &nbsp; &nbsp; <strong>Address:</strong> &nbsp; ${data.address}</li>
-                    <hr>
-                    <li id="Point_Score" class="card-text"><i class="fa-solid fa-star"></i>&nbsp; <strong>Critic Score:</strong> &nbsp; ${data.pointScore}</li>
-                    <br>
-                    <br>
-                    
-                    <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
-                </div>
+            document.getElementById('add_wine').innerHTML = `<div class="col-sm-4 d-flex align-items-center flex-column">
+            <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-5 me-1" style="height: 60vh; width: 18rem;">
+              <img src="${data.wine_imageURL}" class="img-fluid" style="height: 50vh;" alt="wine-img">
+            </div>
+            <div class="card-item mini-card-cont card card-info-container d-flex justify-content-center align-items-center rounded-3 me-1">
+              <h6>
+                  <i class="fa-solid fa-star"></i>&nbsp; <strong>Critic Score:</strong> &nbsp; ${data.pointScore}
+                </h6>
+            </div>
+            </div>
+            <div class="col-sm-8 d-flex justify-content-center align-items-center">
+            <div class="card card-info-container" style="width: 50rem;">
+              <div class="card-body">
+                <h1 class="card-title">${data.wine_name}</h1>
+                <h3 class="card-subtitle mb-2 text-muted">${data.winery_name}</h3>
+                <p class="card-text"></p>
+                <div class="mb-4"></div>
+                <h6>
+                  <i class="fa-solid fa-droplet">&nbsp;&nbsp; </i><strong>Carbonation:</strong> &nbsp; ${data.carbonation}
+                </h6>
+                <h6>
+                  <i class="fa-solid fa-cubes-stacked"> &nbsp;&nbsp; </i><strong>Sweetness:</strong> &nbsp; ${data.sweetness}
+                </h6>
+                <div class="mb-2"></div>
+                <h6>
+                  <i class="fa-solid fa-circle-notch"></i> &nbsp; <strong>Varietal:</strong> &nbsp; ${data.varietal}
+                </h6>
+                <div class="mb-2"></div>
+                <h6>
+                  <i class="fa-solid fa-palette"></i> &nbsp; <strong>Colour:</strong> &nbsp; ${data.colour}
+                </h6>
+                <div class="mb-2"></div>
+                <h6 >
+                  <i class="fa-regular fa-calendar"></i> &nbsp; <strong>Year Bottled:</strong> &nbsp; ${data.year_bottled}
+                </h6>
+                <div class="mb-2"></div>
+                <h6>
+                  <i class="fa-solid fa-earth-americas"></i> &nbsp; <strong>Region:</strong> &nbsp; ${data.region},&nbsp; ${data.country}
+                </h6>
+                <div class="mb-2"></div>
+                <h6>
+                  <i class="fa-solid fa-money-bill"></i> &nbsp; <strong>Price:</strong> &nbsp; ${data.price_amount} ${data.currency}
+                </h6>
+                <div class="mb-2"></div>
+                <h6>
+                  <i class="fa-solid fa-percent"></i> &nbsp; &nbsp; <strong>Alcohol:</strong> ${data.alcohol_percentage}%
+                </h6>
+                <div class="mb-2"></div>
+              
+                <div class="mb-5"></div>
+                  
+                <a href="#" class="card-link">
+                  <div class="btn btn-primary btns-click" data-bs-toggle="modal" data-bs-target="#newReviewModal">Write Review</div>
+                </a>
+                <a href="#" class="card-link">Open winery</a>
+              </div>
+            </div>
             </div>`;
 
             wineID = data.wineID;
@@ -98,7 +117,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
 }
 
 // Updating the Wine Details
-//getWineDetails();
+getWineDetails();
 
 const getUsername = function(){
     const req = new XMLHttpRequest;
