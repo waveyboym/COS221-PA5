@@ -68,14 +68,6 @@
              -9px -9px 24px #e9e9e962;
 }
 
-.card-info-container:hover{
-    transform: scale(1.03);
-}
-
-.card-info-container:active{
-    transform: scale(0.97);
-}
-
 .card-img-top{
     object-fit: cover;
     height: 200px;

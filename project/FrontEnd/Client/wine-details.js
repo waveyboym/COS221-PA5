@@ -97,7 +97,8 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
     xhttpObject.send(body);
 }
 
-getWineDetails();
+// Updating the Wine Details
+//getWineDetails();
 
 const getUsername = function(){
     const req = new XMLHttpRequest;
