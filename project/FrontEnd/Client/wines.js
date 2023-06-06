@@ -36,6 +36,24 @@ const loadDefault = function(){
     xhttpObject.send();
 }
 
+const loadDefault = function(){
+    document.getElementById("searchbar").value = "";
+    const xhttpObject = new XMLHttpRequest();
+    switchOnLoader();
+
+    xhttpObject.onreadystatechange = function() {
+        if(this.readyState == 4 && this.status == 200){
+            switchOffLoader();
+            document.querySelector(".website-container").innerHTML = "";
+            placeWineElements(this.responseText);
+        }
+    };
+
+    xhttpObject.open("GET", "../../Backend/Api/Api.php?type=GET_WINE&lastcount=0");
+    xhttpObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    xhttpObject.send();
+}
+
 const searchFor = function() {
     const searchbarval = document.getElementById("searchbar").value;
     searchval = searchbarval;
@@ -153,9 +171,55 @@ $(document).ready(function(){
         console.log("Insideee");
         var typeWine = $(this).html();
         console.log(typeWine);
-        var body = {
-            type : 'GET_WINES',
-            location : flocation
+        var body = KnowFilter(typeWine);
+        console.log(JSON.stringify(body));
+        var xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function()
+        {
+            if(this.readyState== 4 && this.status == 200)
+            {
+                document.querySelector(".website-container").innerHTML = "";
+                placeWineElements(this.responseText);
+            }
+        }
+
+        xhr.open("POST","../../Backend/Api/Api.php")
+        xhr.send(JSON.stringify(body));
+    })
+
+    $("#CountrySelect").on("change",function(){
+        var Option = $(this).val();
+        var Country = ''
+        switch (Option) {
+            case "1":
+                Country = "Italy";
+                break;
+            case "2":
+                Country = "South Africa";
+                break;
+            case "3":
+                Country = "France";
+                break;
+            case "4":
+                Country = "Germany";
+                break;
+            case "5":
+                Country = "Spain";
+                break;
+            case "6":
+                Country = "Portugal";
+                break;
+            case "7":
+                Country = "Russia";
+                break;
+            case "8":
+                Country = "Turkey";
+                break;
+        
+        }
+        var Sbody = {
+            type : "GET_WINE",
+            filters : { country : Country}
         }
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function()
@@ -163,7 +227,42 @@ $(document).ready(function(){
             if(this.readyState== 4 && this.status == 200)
             {
                 document.querySelector(".website-container").innerHTML = "";
+                placeWineElements(this.responseText);
             }
         }
+
+        xhr.open("POST","../../Backend/Api/Api.php")
+        xhr.send(JSON.stringify(Sbody));
+
     })
+})
+
+function KnowFilter(str)
+{
+    var Pbody;
+    if(str == "Red" || str== "White" )
+    {
+        Pbody = {
+            type : "GET_WINE",
+            filters : {colour : str}
+        }
+    }
+    else if(str == "Bone Dry" || str == "Sparkling")
+    {
+        Pbody = {
+            type : "GET_WINE",
+            filters : {carbonation : str}
+        }
+    }
+    else if(str == "Bordeaux" || str== "Champagne")
+    {
+        Pbody = {
+            type : "GET_WINE",
+            filters : {varietal : str}
+        }
+    }
+
+    return Pbody;
+
+}
 })

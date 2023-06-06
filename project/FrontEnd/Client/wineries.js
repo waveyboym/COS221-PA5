@@ -1,3 +1,9 @@
+var Places = [{latitude : "33.9249", longitude : "18.4241"},
+{latitude : "33.9608", longitude : "25.6022"},{latitude : "29.8587", longitude : "31.0218"},
+{latitude : "26.2041", longitude : "28.0473"},{latitude : "25.7479", longitude : "28.2293"},
+{latitude : "33.0198", longitude : "27.9039"},{latitude : "29.6006", longitude : "30.3794"},
+{latitude : "29.0852", longitude : "26.1596"}]
+
 window.onload = function(){
     const xhttpObject = new XMLHttpRequest();
     switchOnLoader();
@@ -142,53 +148,55 @@ $(document).ready(function(){
     })
         
     
-    function FilterCheck(str){     /////Function for filtering takes in the number to know which option it is
-        var location = '';
-        switch (str) {
-            case 2:
-                location = "Cape Town";
-                break;
-        
-            case 3:
-                location = "Port Elizabeth";
-                break;
-            case 4:
-                location = "Durban";
-                break;
-            case 5:
-                location = "Johannesburg";
-                break;
-            case 6:
-                location = "Pretoria";
-                break;
-            case 7:
-                location = "East London";
-                break;
-            case 8:
-                location = "Pietermaritzburg";
-                break;
-            case 9:
-                location = "Bloemfontein";
-                break;
-        } 
-
-    }
 });
+
+function FilterCheck(str){     /////Function for filtering takes in the number to know which option it is
+    var location = 0;
+    switch (str) {
+        case "Cape Town":
+            location = 0;
+            break;
+    
+        case "Port Elizabeth":
+            location = 1;
+            break;
+        case "Durban":
+            location = 2;
+            break;
+        case "Johannesburg":
+            location = 3;
+            break;
+        case "Pretoria":
+            location = 4;
+            break;
+        case "East London":
+            location = 5;
+            break;
+        case "Pietermaritzburg":
+            location = 6;
+            break;
+        case "Bloemfontein":
+            location = 7;
+            break;
+    } 
+    return location;
+
+}
 
 function FilterSearch(name)
 {
     switchOnLoader();
 
     NotFound= false;
-    flocation = $(name).html();
-    console.log(flocation);
+    var index = FilterCheck($(name).html())
+    console.log(index);
     var body = {
         type : 'GET_WINERIES',
-        filters : {
-            region : flocation
+        location : {
+            latitude : Places[index].latitude,
+            longitude : Places[index].longitude
         }
     }
-    console.log(flocation);
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange= function(){
         if(this.readyState == 4 && this.status == 200)
