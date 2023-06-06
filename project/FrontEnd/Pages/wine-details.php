@@ -19,16 +19,65 @@
     include "../Components/Navbar.php";
     if(isset($_SESSION['adminkey']))header("Location: admin.php");
     ?>
-    <!-- ----------------------------Filter Tab------------------------------------- -->
-    <!-- ----------------------------Tab END --------------------------------------- -->
-
-    <!-- ------------------------------Beginning-Wine-Details------------------------------- -->
-
-    <div id="add_wine" style="margin-bottom: 40px">
-    </div>
-
-    <div class="d-flex justify-content-center w-100">
-      <div class="btn btn-primary btns-click" style="margin-left: auto; margin-right: auto;" data-bs-toggle="modal" data-bs-target="#newReviewModal">Write Review</div>
+    <div id="add_wine" class="row w-100" style="margin-top: 100px; margin-bottom: 40px; height: calc(100vh-70px);">
+      <div class="col-sm-4 d-flex align-items-center flex-column">
+        <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-5 me-1" style="height: 60vh; width: 18rem;">
+          <img src="{url of wine image goes here}" class="img-fluid" style="height: 50vh;" alt="wine-img">
+        </div>
+        <div class="card-item mini-card-cont card card-info-container d-flex justify-content-center align-items-center rounded-3 me-1">
+          <h6>
+              <i class="fa-solid fa-star"></i>&nbsp; <strong>Critic Score:</strong> &nbsp; {pointscore of wine goes here}
+            </h6>
+      </div>
+      </div>
+      <div class="col-sm-8 d-flex justify-content-center align-items-center">
+        <div class="card card-info-container" style="width: 50rem;">
+          <div class="card-body">
+            <h1 class="card-title">{Name of wine image goes here}</h1>
+            <h3 class="card-subtitle mb-2 text-muted">{Winery name of wine goes here}</h3>
+            <p class="card-text">{description of wine goes here}</p>
+            <div class="mb-4"></div>
+            <h6>
+              <i class="fa-solid fa-droplet">&nbsp;&nbsp; </i><strong>Carbonation:</strong> &nbsp; {Carbonation of wine goes here}
+            </h6>
+            <h6>
+              <i class="fa-solid fa-cubes-stacked"> &nbsp;&nbsp; </i><strong>Sweetness:</strong> &nbsp; {Sweetness of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6>
+              <i class="fa-solid fa-circle-notch"></i> &nbsp; <strong>Varietal:</strong> &nbsp; {Varietal of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6>
+              <i class="fa-solid fa-palette"></i> &nbsp; <strong>Colour:</strong> &nbsp; {Colour of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6 >
+              <i class="fa-regular fa-calendar"></i> &nbsp; <strong>Year Bottled:</strong> &nbsp; {year_bottled of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6>
+              <i class="fa-solid fa-earth-americas"></i> &nbsp; <strong>Region:</strong> &nbsp; {region of wine goes here},&nbsp; {country of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6>
+              <i class="fa-solid fa-money-bill"></i> &nbsp; <strong>Price:</strong> &nbsp; {price of wine goes here} {currency of wine goes here}
+            </h6>
+            <div class="mb-2"></div>
+            <h6>
+              <i class="fa-solid fa-percent"></i> &nbsp; &nbsp; <strong>Alcohol:</strong> {alchol percentage of wine goes here}%
+            </h6>
+            <div class="mb-2"></div>
+          
+            <div class="mb-5"></div>
+              
+            <a href="#" class="card-link">
+              <div class="btn btn-primary btns-click" data-bs-toggle="modal" data-bs-target="#newReviewModal">Write Review</div>
+            </a>
+            <a href="#" class="card-link">Open winery</a>
+          </div>
+        </div>
+      </div>
     </div>
 
     <!-- Modal -->
@@ -36,26 +85,24 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <h5 class="modal-title" id="newReviewModalLabel">Write a Review</h5>
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                            <span aria-hidden="true">&times;</span>
-                                        </button>
+                                        <h5 class="modal-title text-dark" id="newReviewModalLabel">Write a Review</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                     </div>
                                     <div class="modal-body">
                                         <form>
                                             <div class="form-group">
-                                            <label for="newReviewText">Review:</label>
+                                            <label for="newReviewText" class="text-dark">Review:</label>
                                             <textarea class="form-control" id="newReviewText" rows="3" required></textarea>
                                             </div>
                                             <div class="form-group">
-                                            <label for="newPointScore">Point Score (50-100):</label>
+                                            <label for="newPointScore" class=" text-dark">Point Score (50-100):</label>
                                             <input type="number" class="form-control" id="newPointScore" min="50" max="100" required>
                                             </div>
                                         </form>
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-primary btns-click" onmouseup="insertReview()">Submit</button>
-                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                                     </div>
                                 </div>
                             </div>

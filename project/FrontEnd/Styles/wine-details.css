@@ -49,7 +49,6 @@
 .card-item{
     box-shadow: 5px 5px 25px 5px var(--black-1000-20);
     transition: transform 0.4s ease-in-out;
-    margin: 1rem;
 }
 
 .card-item:hover{
@@ -61,7 +60,6 @@
 }
 
 .card-info-container{
-    margin-top: 50px;
     border-radius: 10px !important;
     transition: transform 0.5s ease-in-out;
     box-shadow:  9px 9px 24px #d7d7d777,
@@ -73,4 +71,32 @@
     height: 200px;
     border-top-left-radius: 10px;
     border-bottom-left-radius: 10px;
+}
+
+.mini-card-cont{
+    border-radius: 10px !important;
+    height: 10vh; 
+    width: 18rem; 
+}
+
+.btns-click, .btns-click-gray{
+    margin-left: 5px;
+    margin-right: 5px;
+    cursor: pointer;
+    background-color: var(--app-theme-col) !important;
+    border-radius: 10px !important;
+    border: none !important;
+    transition: transform 0.3s ease-in-out;
+}
+
+.btns-click-gray{
+    background-color: var(--gray-1000) !important;
+}
+
+.btns-click:hover, .btns-click-gray:hover{
+    opacity: 0.9;
+}
+
+.btns-click:active, .btns-click-gray:hover{
+    transform: scale(0.99);
 }
