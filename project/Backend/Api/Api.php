@@ -485,7 +485,7 @@ class Api extends config{
 
         if(!isset($name))return $this->constructResponseObject(ERRORTYPES::NONAME->value, "error");
 
-        $FIELDS = "wineID, wine_name, varietal, carbonation, sweetness, colour, vintage, year_bottled, wine_imageURL, pointScore, currency, price_amount, alcohol_percentage, winery_name, location.address AS address, region.region_name AS region, region.country AS country";
+        $FIELDS = "wineID, wine.wineryID, wine_name, varietal, carbonation, sweetness, colour, vintage, year_bottled, wine_imageURL, pointScore, currency, price_amount, alcohol_percentage, winery_name, location.address AS address, region.region_name AS region, region.country AS country";
         $JOIN = "JOIN winery ON wine.wineryID = winery.wineryID JOIN location ON winery_locationID = location.locationID JOIN region ON region.regionID = location.regionID";
         
         $name = strtolower($name);

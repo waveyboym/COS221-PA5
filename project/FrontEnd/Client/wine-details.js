@@ -1,5 +1,6 @@
 var wineNameLocalStorage = localStorage.getItem('winery_name');
 var wineID;
+let wineryID;
 var username;
 
 
@@ -50,6 +51,8 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
         if (xhttpObject.readyState === 4 && xhttpObject.status === 200){
             var response = JSON.parse(xhttpObject.responseText);
             var data = response.data[0];
+
+            wineryID = data.wineryID;
             
             document.getElementById('add_wine').innerHTML = `<div class="col-sm-4 d-flex align-items-center flex-column">
             <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-5 me-1" style="height: 60vh; width: 18rem;">
@@ -105,7 +108,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
                 <a href="#" class="card-link">
                   <div class="btn btn-primary btns-click" data-bs-toggle="modal" data-bs-target="#newReviewModal">Write Review</div>
                 </a>
-                <a href="#" class="card-link">Open winery</a>
+                <a href="#" class="card-link" onmouseup="openWinery()">Open winery</a>
               </div>
             </div>
             </div>`;
@@ -168,13 +171,11 @@ const insertReview = function() {
     req.send(body);
 }
 
-const openWinery = function(wineryID){
+const openWinery = function(){
     const xhttpObject = new XMLHttpRequest();
-    // switchOnLoader();
 
     xhttpObject.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200){
-            // switchOffLoader();
             window.location.href = "wineries-details.php";
         }
     };
