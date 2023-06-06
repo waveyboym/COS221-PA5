@@ -237,9 +237,9 @@ const validateLogin = function(){
                     var jRes = JSON.parse(res);
 
                     if(jRes.status == 'success'){
-                        makeUsernameSession(jRes.data);
+                        makeUsernameSession(jRes.data[0].username);
 
-                        window.location.href = "index.php";
+                        window.location.href = "profile.php";
                     }
                     else if(jRes.status == 'error'){
                         document.querySelector(".error-container").innerHTML = jRes.data;

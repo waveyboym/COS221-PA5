@@ -105,7 +105,7 @@ class Api extends config{
         $success = $stmt->execute(array($UserEmail, $hashedPass));
 
         if($success && $stmt->rowCount() != 0){
-            return $this->constructResponseObject($stmt->fetchColumn(), "success");
+            return $this->constructResponseObject($stmt->fetchAll(), "success");
         }
         else{
             return $this->constructResponseObject(ERRORTYPES::NULLUSER->value, "error");

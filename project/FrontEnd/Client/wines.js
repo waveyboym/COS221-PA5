@@ -36,24 +36,6 @@ const loadDefault = function(){
     xhttpObject.send();
 }
 
-const loadDefault = function(){
-    document.getElementById("searchbar").value = "";
-    const xhttpObject = new XMLHttpRequest();
-    switchOnLoader();
-
-    xhttpObject.onreadystatechange = function() {
-        if(this.readyState == 4 && this.status == 200){
-            switchOffLoader();
-            document.querySelector(".website-container").innerHTML = "";
-            placeWineElements(this.responseText);
-        }
-    };
-
-    xhttpObject.open("GET", "../../Backend/Api/Api.php?type=GET_WINE&lastcount=0");
-    xhttpObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttpObject.send();
-}
-
 const searchFor = function() {
     const searchbarval = document.getElementById("searchbar").value;
     searchval = searchbarval;
@@ -265,4 +247,3 @@ function KnowFilter(str)
     return Pbody;
 
 }
-})

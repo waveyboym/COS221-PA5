@@ -46,7 +46,7 @@
             <h5 class="card-title">Total reviews by you</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-file-invoice pe-3" style="font-size: 1.5rem;"></i>
-              <h2 id="reviewCount" class="card-text">115870</h2>
+              <h2 id="reviewCount" class="card-text">0</h2>
             </div>
           </div>
         </div>
@@ -116,7 +116,7 @@
           <div class="modal-body">
             <div class="mb-3">
                 <label for="username-input" class="form-label text-dark">Enter your new username</label>
-                <input type="text" class="form-control" id="username-input">
+                <input type="text" class="form-control" id="username-input" placeholder="">
               </div>
           </div>
           <div class="modal-footer">
@@ -139,7 +139,7 @@
           <div class="modal-body">
               <div class="mb-3">
                 <label for="password-input" class="form-label text-dark">Enter your new password</label>
-                <input type="password" class="form-control" id="password-input">
+                <input type="password" class="form-control" id="password-input" placeholder="">
               </div>
           </div>
           <div class="modal-footer">

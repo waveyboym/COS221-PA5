@@ -54,7 +54,7 @@
     <div class="container">
       <a class="navbar-brand d-flex" href="index.php">
         <i class="fa-solid fa-wine-glass pe-3 title-icon" style="<?php echo colour()?> font-size: 2rem;"></i>
-        <h3 class="me-5 title-text" style="<?php echo colour()?>">Winery SA</h3>
+        <h3 class="title-text" style="<?php echo colour()?>">Winery SA</h3>
     </a>
       <button
         class="navbar-toggler"
@@ -80,7 +80,7 @@
                     '</li>';
             }
           ?>
-          <li class="nav-item ms-3 border rounded-2">
+          <li class="nav-item border rounded-2">
             <?php if(isset($_SESSION['username'])){
               echo '<a href="profile.php"><!--check whether a user is manager and conditionally render-->'.
                         '<div class="btn btn-black btn-rounded title-username">'.
