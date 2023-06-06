@@ -29,7 +29,8 @@ enum REQUESTYPE: string
     case GET_USER_REVIEWS = 'GET_USER_REVIEWS';
     case INSERT_REVIEW = 'INSERT_REVIEW';
     case UPDATE_REVIEW = 'UPDATE_REVIEW';
-    case DELETE_REVIEW = 'DELETE_REVIEW'; //To be implemented
+    case DELETE_REVIEW = 'DELETE_REVIEW'; 
+    case GET_REVIEW_COUNT = 'GET_REVIEW_COUNT';
     case GET_WINERY_ADMIN = 'GET_WINERY_ADMIN';
     case GET_MANAGERS_ADMIN = 'GET_MANAGERS_ADMIN';
     case OPEN_WINERY_ADMIN = 'OPEN_WINERY_ADMIN';
@@ -237,6 +238,19 @@ class Api extends config{
         
         if($stmt->rowCount() > 0){
             return $this->constructResponseObject($rows, "success");
+        }
+        else{
+            return $this->constructResponseObject("", "error");
+        }
+    }
+
+    public function getReviewCount($username){
+        $conn = $this->connectToDatabase();
+        $stmt = $conn->prepare('SELECT COUNT(*)  FROM review JOIN user ON userID = reviewer_userID WHERE username = ?');
+        $success = $stmt->execute(array($username));
+
+        if($stmt->rowCount() > 0){
+            return $this->constructResponseObject($stmt->fetchColumn(), "success");
         }
         else{
             return $this->constructResponseObject("", "error");
@@ -708,6 +722,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     else if($USERREQUEST->type == REQUESTYPE::GET_USER_REVIEWS->value){
         echo $apiconfig->getUserReviews($USERREQUEST->username);
+    }
+    else if($USERREQUEST->type == REQUESTYPE::GET_REVIEW_COUNT->value){
+        echo $apiconfig->getReviewCount($USERREQUEST->username);
     }
     else if($USERREQUEST->type == REQUESTYPE::UPDATE_REVIEW->value){
         echo $apiconfig->updateReview($USERREQUEST->review, $USERREQUEST->reviewID);
