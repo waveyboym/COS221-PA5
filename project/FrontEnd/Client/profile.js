@@ -36,6 +36,7 @@ req.onreadystatechange = function() {
                           '</tr>';
         }
 
+        setReviewCount();
         document.querySelector('tbody').innerHTML = reviewOutput;
       }
     };
@@ -158,12 +159,69 @@ const setcurrentlySelectedReviewID = function(newID){
 const editReview = function(){
   const reviewdescription = document.getElementById("reviewdescription").value;
   
-  //do stuff with id of the review is set in currentlySelectedReviewID variable
+  req = new XMLHttpRequest
+  json = {"type": "UPDATE_REVIEW", "review": reviewdescription,"reviewID": currentlySelectedReviewID};
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      var res = req.responseText;
+      var jRes = JSON.parse(res);
+
+      if(jRes.status == 'success'){
+        location.reload();
+      }
+      else if(jRes.status == 'error'){
+          console.log(res);
+      }
+    }
+  }
+
+  req.open('POST', '../../Backend/Api/Api.php');
+  req.send(JSON.stringify(json));
 }
 
 const deleteReview = function(){
-  
-  //do stuff with id of the review is set in currentlySelectedReviewID variable
+  req = new XMLHttpRequest
+  json = {"type": "DELETE_REVIEW", "reviewID": currentlySelectedReviewID};
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      var res = req.responseText;
+      var jRes = JSON.parse(res);
+
+      if(jRes.status == 'success'){
+        location.reload();
+      }
+      else if(jRes.status == 'error'){
+        console.log(res);
+      }
+    }
+  }
+
+  req.open('POST', '../../Backend/Api/Api.php');
+  req.send(JSON.stringify(json));
+}
+
+const setReviewCount = function(){
+  req = new XMLHttpRequest
+  json = {"type": "GET_REVIEW_COUNT","username": username};
+
+  req.onreadystatechange = function() {
+    if (req.readyState == 4 && req.status == 200) {
+      var res = req.responseText;
+      var jRes = JSON.parse(res);
+
+      if(jRes.status == 'success'){
+        document.getElementById("reviewCount").innerHTML = jRes.data;
+      }
+      else if(jRes.status == 'error'){
+        console.log(res);
+      }
+    }
+  }
+
+  req.open('POST', '../../Backend/Api/Api.php');
+  req.send(JSON.stringify(json));
 }
 
 const makeUsernameSession = function(username){

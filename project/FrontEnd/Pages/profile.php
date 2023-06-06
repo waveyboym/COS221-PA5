@@ -46,7 +46,7 @@
             <h5 class="card-title">Total reviews by you</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-file-invoice pe-3" style="font-size: 1.5rem;"></i>
-              <h2 class="card-text">115870</h2>
+              <h2 id="reviewCount" class="card-text">115870</h2>
             </div>
           </div>
         </div>

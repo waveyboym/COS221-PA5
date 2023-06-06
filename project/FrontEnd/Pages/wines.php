@@ -39,7 +39,7 @@
 
     <!-- ------------------------------Beginning-Wines------------------------------- -->
     <nav class="overflow-y-auto content-container">
-      <nav class="website-container overflow-y-visible">
+      <nav class="website-container overflow-y-visible mb-3 pt-3 pb-3">
 
       </nav>
       <nav class="load-more-btn-container">
@@ -58,12 +58,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <h6 class="text-dark">Sort by price ranges:</h6>
-            <label for="customRange1" class="form-label text-dark">Min price for wines sold at winery: $2000</label>
-            <input type="range" class="form-range" id="customRange2">
-            <label for="customRange1" class="form-label text-dark">Max price for wines sold at winery: $5000</label>
-            <input type="range" class="form-range" id="customRange1">
-
             <h6 class="text-dark">Sort by rating:</h6>
             <!-- <label for="customRange2" class="form-label">Rating</label> -->
             <input type="range" class="form-range" min="0" max="5" id="customRange2">
@@ -157,8 +151,8 @@
             <input type="text" class="form-control" id="enteredLocation" placeholder="Enter country here">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--app-theme-col);">Update filters</button>
+            <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btns-click" style="background-color: var(--app-theme-col);">Update filters</button>
           </div>
         </div>
       </div>

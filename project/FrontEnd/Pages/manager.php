@@ -12,18 +12,75 @@
     <title>Winery SA | Manager</title>
 </head>
 <body>
+  <!-- COMMENT OUT THE SECOND LINE OF PHP IF YOU CANNOT LOG IN, FOR TESTING PURPOSES
     <?php 
       include "../Components/Navbar.php";
+      
       if(!isset($_SESSION['managerkey']) || !isset($_SESSION['adminkey']))header("Location: index.php");
+      
     ?>
+    (login functionality actually taking me to managers.php does not seem to be working for me)-->
+
+  <!-- Hello there! You can feel free to delete this comment if necessary. I figured I'd explain some
+  of what is actually *on* this revised page here so I can clarify what needs doing, but hit me up with any questions
+  if you need to.
+
+  The backend work necessary is mostly just loading data into the sheet, which is API wizardry I have alas very little
+  experience with. I have a template for what you'll need to add for each row below, which might be useful.
+
+  I also have the SQL queries written for loading the data that forms the first simple cards on the page, as well as
+  the one used for loading all the wines from a particular user's winery. The latter SQL query is directly below, alongside the template.
+
+  Ideally, the manager will be able to use the trashcan or pen button on each row to delete or edit a wine, or
+  use the 'add wine' button to add wines. The wine in question will automatically have a wineryID identical to the winery
+  that the user manages. While I could have created cards to pop up when the buttons are clicked, I didn't want to end up
+  making something that would take more work to redo properly than to simply do once with the goal of using the API in mind.
+
+  Once again, if you need anything from me, please let me know - I'm going to be working on my portion of the PDF, so I'll be
+  awake.
+  -->
+  <!-- TEMPLATE -->
+  <!--
+  <tr>
+    <td>WINE NAME</td>
+    <td>VARIETAL</td>
+    <td>CARBONATION</td>
+    <td>SWEETNESS</td>
+    <td>COLOUR</td>
+    <td>VINTAGE</td>
+    <th scope="row action-btns">
+      <i class="fa-solid fa-trash action-btn"></i>
+    </th>
+    <th scope="row action-btns">
+      <i class = "fa-solid fa-edit action-btn"></i>
+    </th>
+  </tr>
+
+  SELECT *
+  FROM wine
+  JOIN winery ON wine.wineryID = winery.wineryID
+  JOIN user ON winery.winery_manager = user.userid
+  WHERE user.username = 'USERNAME';
+
+  -->
+
     <nav class="main-admin-container">
       <nav class="at-a-glance-cards">
         <div class="card at-a-glance-card">
           <div class="card-body">
-            <h5 class="card-title">Total wineries</h5>
+            <h5 class="card-title">Winery name</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-store pe-2" style="font-size: 1.5rem;"></i>
-              <h2 class="card-text">133150</h2>
+              <!-- This card's text should load in the name of the manager's assigned winery. -->
+              <!-- The SQL query that should be used could look something like the below comment. -->
+              <!-- 
+                SELECT winery_name
+                FROM winery
+                JOIN user ON winery.winery_manager = user.userID
+                WHERE user.username = 'LisaWilbourn'
+                LIMIT 1;
+              -->
+              <h2 class="card-text">PLACEHOLDER</h2>
             </div>
           </div>
         </div>
@@ -32,136 +89,200 @@
             <h5 class="card-title">Total wines</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-wine-glass pe-3" style="font-size: 1.5rem;"></i>
-              <h2 class="card-text">11350</h2>
+              <!-- This card's text should load in the count of the wines associated with the manager's assigned winery. -->
+              <!-- The SQL query that should be used could look something like the below comment. -->
+              <!-- SELECT COUNT(*) AS wine_count
+                  FROM wine
+                  JOIN winery ON wine.wineryid = winery.wineryid
+                  JOIN user ON winery.winery_manager = user.userid
+                  WHERE user.username = 'USERNAME; 
+              -->
+              <h2 class="card-text">PLACEHOLDER</h2>
             </div>
           </div>
         </div>
         <div class="card at-a-glance-card">
           <div class="card-body">
-            <h5 class="card-title">Total tourists</h5>
+            <h5 class="card-title">Total reviews</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-person pe-3" style="font-size: 1.5rem;"></i>
-              <h2 class="card-text">115870</h2>
+              <!-- This card's text should load in the count of the reviews associated with wines at the manager's assigned winery. -->
+              <!-- The SQL query that should be used could look something like the below comment. -->
+              <!-- SELECT COUNT(*) AS wine_count
+                  SELECT COUNT(*) AS review_count
+                  FROM review
+                  JOIN wine ON review.wineID = wine.wineID
+                  JOIN winery ON wine.wineryID = winery.wineryID
+                  JOIN user ON winery.winery_manager = user.userid
+                  WHERE user.username = 'USERNAME';
+              -->
+              <h2 class="card-text">PLACEHOLDER</h2>
             </div>
           </div>
         </div>
         <div class="card at-a-glance-card">
           <div class="card-body">
-            <h5 class="card-title">Total managers</h5>
+            <h5 class="card-title">Average score</h5>
             <div class="card-icon-and-count">
               <i class="fa-solid fa-people-roof pe-3" style="font-size: 1.5rem;"></i>
-              <h2 class="card-text">54955</h2>
+              <!-- This card's text should load in the average score of the reviews associated with wines at the manager's assigned winery. -->
+              <!-- The SQL query that should be used could look something like the below comment. -->
+              <!-- SELECT COUNT(*) AS wine_count
+                  SELECT AVG(points) AS review_count
+                  FROM review
+                  JOIN wine ON review.wineID = wine.wineID
+                  JOIN winery ON wine.wineryID = winery.wineryID
+                  JOIN user ON winery.winery_manager = user.userid
+                  WHERE user.username = 'USERNAME';
+              -->
+              <h2 class="card-text">PLACEHOLDER</h2>
             </div>
           </div>
         </div>
       </nav>
       <nav class="list-of-various-elements">
         <nav class="navigation-tabs-for-list">
-          <div class="btn btn-primary btns-click">view winery</div>
-          <div class="btn btn-primary btns-click">view wine</div>
-          <div class="btn btn-primary btns-click">view user</div>
-          <div class="btn btn-primary btns-click">view managers</div>
-          <div class="btn btn-primary btns-click">view admin</div>
-
-          <div class="divider"></div>
-
-          <div class="btn btn-primary btns-click">Add winery</div>
-          <div class="btn btn-primary btns-click">Add wine</div>
-          <div class="btn btn-primary btns-click">Add user</div>
-          <div class="btn btn-primary btns-click">Add managers</div>
-          <div class="btn btn-primary btns-click">Add admin</div>
+          <div class="btn btn-primary btns-click">add wine</div>
         </nav>
         <nav class="container-of-data list-group">
           <table class="table">
             <thead>
               <tr>
-                <th scope="col">id</th>
-                <th scope="col">First Name</th>
-                <th scope="col">Last Name</th>
-                <th scope="col">Handle</th>
+                <th scope="col">Wine name</th>
+                <th scope="col">Varietal</th>
+                <th scope="col">Carbonation</th>
+                <th scope="col">Sweetness</th>
+                <th scope="col">Colour</th>
+                <th scope="col">Vintage</th>
+                <th scope="col invisible-row-col">#</th>
                 <th scope="col invisible-row-col">#</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <th scope="row">1</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <td>Montrachet Grand Cru 2010</td>
+                <td>Johannisberg</td>
+                <td>sparkling</td>
+                <td>Medium/off dry</td>
+                <td>white</td>
+                <td>2010</td>
                 <th scope="row action-btns">
                   <i class="fa-solid fa-trash action-btn"></i>
                 </th>
-              </tr>
-              <tr>
-                <th scope="row">2</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
                 <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
+                  <i class="fa-solid fa-edit action-btn"></i>
                 </th>
               </tr>
               <tr>
-                <th scope="row">3</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <td>Montrachet Grand Cru 2014</td>
+                <td>Moscatel</td>
+                <td>still</td>
+                <td>Very sweet</td>
+                <td>white</td>
+                <td>2014</td>
                 <th scope="row action-btns">
                   <i class="fa-solid fa-trash action-btn"></i>
                 </th>
-              </tr>
-              <tr>
-                <th scope="row">4</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
                 <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
+                  <i class="fa-solid fa-edit action-btn"></i>
                 </th>
               </tr>
               <tr>
-                <th scope="row">5</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
+                <td>Meursault Les Rougeots 2001</td>
+                <td>Fernão Pires</td>
+                <td>still</td>
+                <td>Dry</td>
+                <td>white</td>
+                <td>2001</td>
                 <th scope="row action-btns">
                   <i class="fa-solid fa-trash action-btn"></i>
                 </th>
-              </tr>
-              <tr>
-                <th scope="row">6</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
                 <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
+                  <i class="fa-solid fa-edit action-btn"></i>
                 </th>
               </tr>
               <tr>
-                <th scope="row">7</th>
-                <td>Mark</td>
-                <td>Otto</td>
-                <td>@mdo</td>
+                <td>Corton-Charlemagne Grand Cru N.V.</td>
+                <td>Emir</td>
+                <td>semi-sparkling</td>
+                <td>Medium/off dry</td>
+                <td>white</td>
+                <td>1968</td>
                 <th scope="row action-btns">
                   <i class="fa-solid fa-trash action-btn"></i>
                 </th>
-              </tr>
-              <tr>
-                <th scope="row">8</th>
-                <td>Jacob</td>
-                <td>Thornton</td>
-                <td>@fat</td>
                 <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
+                  <i class="fa-solid fa-edit action-btn"></i>
                 </th>
               </tr>
               <tr>
-                <th scope="row">9</th>
-                <td>Larry</td>
-                <td>the Bird</td>
-                <td>@twitter</td>
+                <td>Estate Finch Hollow Chardonnay (Cave Fermented) 2014</td>
+                <td>Laški Rizling</td>
+                <td>still</td>
+                <td>Medium/off dry</td>
+                <td>white</td>
+                <td>2014</td>
                 <th scope="row action-btns">
                   <i class="fa-solid fa-trash action-btn"></i>
+                </th>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-edit action-btn"></i>
+                </th>
+              </tr>
+              <tr>
+                <td>Y 1996</td>
+                <td>Códega de Larinho</td>
+                <td>semi-sparkling</td>
+                <td>Very sweet</td>
+                <td>white</td>
+                <td>1996</td>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-trash action-btn"></i>
+                </th>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-edit action-btn"></i>
+                </th>
+              </tr>
+              <tr>
+                <td>Bâtard-Montrachet Grand Cru 1996</td>
+                <td>Merseguera</td>
+                <td>sparkling</td>
+                <td>Dry</td>
+                <td>white</td>
+                <td>1996</td>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-trash action-btn"></i>
+                </th>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-edit action-btn"></i>
+                </th>
+              </tr>
+              <tr>
+                <td>Montrachet Grand Cru Marquis de Laguiche 2004</td>
+                <td>Fiano</td>
+                <td>still</td>
+                <td>Dry</td>
+                <td>white</td>
+                <td>2004</td>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-trash action-btn"></i>
+                </th>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-edit action-btn"></i>
+                </th>
+              </tr>
+              <tr>
+                <td>Meursault Les Rougeots 2005</td>
+                <td>Garganega</td>
+                <td>semi-sparkling</td>
+                <td>Medium/off dry</td>
+                <td>white</td>
+                <td>2005</td>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-trash action-btn"></i>
+                </th>
+                <th scope="row action-btns">
+                  <i class="fa-solid fa-edit action-btn"></i>
                 </th>
               </tr>
           
