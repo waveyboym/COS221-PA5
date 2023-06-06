@@ -505,7 +505,6 @@ class Api extends config{
             
         }
         
-
         //FILTERS
         $filterchecks = array('varietal'=>0, 'colour'=>0, 'carbonation'=>0, 'sweetness'=>0, 'country'=>0);
         $country = false;
@@ -545,17 +544,19 @@ class Api extends config{
         //Statement
         $FIELDS = "wineID, wine_name, varietal, carbonation, sweetness, colour, vintage, year_bottled, wine_imageURL, pointScore, currency, price_amount, alcohol_percentage, winery_name, location.address AS address, region.region_name AS region, region.country AS country";
         $conn = $this->connectToDatabase();
-        //echo("QUERY IS:");
-        //echo("SELECT $FIELDS FROM wine $JOIN $WHERE $ORDERBY $LIMIT");
+
         $stmt = $conn->prepare("SELECT $FIELDS FROM wine $JOIN $WHERE $ORDERBY $LIMIT");
-     
-        for($i = 0; $i < sizeof($filterchecks); $i++){
-            if(array_values($filterchecks)[$i] == 1){
-                $thing = array_keys($filterchecks)[$i];
-                $value = $filters->$thing;
-                $stmt->bindParam(":" . array_keys($filterchecks)[$i], $value); 
-            }
+
+        if($filterchecks["colour"] == 1){
+            $stmt->bindParam(":colour" , $filters->colour); 
         }
+        if($filterchecks["carbonation"] == 1){
+            $stmt->bindParam(":carbonation" , $filters->carbonation); 
+        }
+        if($filterchecks["sweetness"] == 1){
+            $stmt->bindParam(":sweetness" , $filters->sweetness); 
+        }
+        
         if($country == true){
             $stmt->bindParam(":country", $filters->country); 
         }
@@ -565,6 +566,7 @@ class Api extends config{
 
         $stmt->execute();
         $data = $stmt->fetchAll();
+
         return $this->constructResponseObject($data, "success", $lastcount + 10);
   
     }
