@@ -14,6 +14,8 @@
     <?php 
     session_start();
     if(isset($_SESSION['adminkey']))header("Location: admin.php");
+    if(isset($_SESSION['managerkey']))header("Location: manager.php");
+    if(isset($_SESSION['username']))header("Location: index.php");
     ?>
     <div class="container d-flex justify-content-center align-items-center min-vh-100">
         <div class="row rounded-4 box-area bg-white" >
@@ -23,7 +25,7 @@
             <div class="col-md-7 right-box rounded-right-3 signup-login-box">
                 <form action="#" method="post" onsubmit="return validateLogin()" class="needs-validation">
                     <div class="row align-items-center rounded-right-3">
-                        <div class="header-text mb-4">
+                        <div class="header-text mb-2">
                             <h3>Welcome back to Winery SA</h3>
                             <p>We are glad to see you again</p>
                         </div>
@@ -36,10 +38,13 @@
                         <div class="input-group mb-3">
                             <input type="submit" class="btn btn-lg w-100 fs-6 login-btn" value="Login">
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-1">
                             <button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleSignUpLogin()">Don't have an account? Signup instead</button>
                         </div>
-                        <div class="input-group mb-3">
+                        <div class="input-group mb-1">
+                            <button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleManagerLogin()">I am a winery manager</button>
+                        </div>
+                        <div class="input-group mb-2">
                             <button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleAdminLogin()">I am an admin</button>
                         </div>
                         <p class="text-danger error-container"></p>

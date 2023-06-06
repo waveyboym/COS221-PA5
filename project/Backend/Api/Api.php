@@ -16,6 +16,7 @@ enum REQUESTYPE: string
     case REGISTER = 'REGISTER';
     case LOGIN = 'LOGIN';
     case LOGIN_ADMIN = 'LOGIN_ADMIN';
+    case LOGIN_MANAGER = 'LOGIN_MANAGER';
     case LOGOUT = "LOGOUT";
     case GET_WINERIES = 'GET_WINERIES';
     case GET_WINE = 'GET_WINE';
@@ -40,6 +41,10 @@ enum REQUESTYPE: string
     case OPEN_WINE = 'OPEN_WINE';
     case LOAD_MORE_WINES = 'LOAD_MORE_WINES';
     case GET_WINE_REVIEWS = 'GET_WINE_REVIEWS';
+    case LOAD_MANAGER_DATA = 'LOAD_MANAGER_DATA';
+    case ADD_WINE = 'ADD_WINE';
+    case EDIT_WINE = 'EDIT_WINE';
+    case DELETE_WINE = 'DELETE_WINE';
     /**Add more cases */
 }
 
@@ -119,6 +124,40 @@ class Api extends config{
         }
         else{
             return $this->constructResponseObject("Database connection has failed or no admin exists", "error");
+        }
+    }
+
+    public function loginManager($ManagerUsername, $ManagerPassword){
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT userID, username FROM user WHERE email = ? AND Password = ?");
+        $hashedPass = hash("sha256", $ManagerPassword, false);
+        $success = $stmt->execute(array($ManagerUsername, $hashedPass));
+
+        if($success && $stmt->rowCount() > 0){
+            $result = $stmt->fetchAll();
+            //use return data over here
+            foreach($result as $valuesToOutput){
+                if(isset($valuesToOutput['userID']) && isset($valuesToOutput['username'])){
+                    $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+                    $success = $stmt->execute(array($valuesToOutput['userID']));
+
+                    if($success && $stmt->rowCount() > 0){
+                        session_start();
+                        $_SESSION["managerkey"] = $valuesToOutput['userID'];
+                        $_SESSION["managerusername"] = $valuesToOutput['username'];
+                        return $this->constructResponseObject("", "success");
+                    }
+                    else{
+                        return $this->constructResponseObject("Database connection has failed or no manager exists", "error");
+                    }
+                }
+                else{
+                    $this->constructResponseObject("Database connection has failed or no manager exists", "error");
+                }
+            }
+        }
+        else{
+            return $this->constructResponseObject("Database connection has failed or no manager exists", "error");
         }
     }
 
@@ -563,6 +602,83 @@ class Api extends config{
         return $this->constructResponseObject($wines, "success");
     }
 
+    public function loadManagersData($last_id = 0){
+        session_start();
+        $managerkey = $_SESSION["managerkey"];
+
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $success = $stmt->execute(array($managerkey));
+
+        if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+
+        if($stmt->rowCount() == 0)return $this->constructResponseObject("No manager exists with your key", "error");
+
+        /////////////
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT winery_name FROM winery JOIN user ON winery.winery_manager = user.userID WHERE user.userID = ? LIMIT 1;");
+        $success = $stmt->execute(array($managerkey));
+        $result = $stmt->fetchAll();
+        //use return data over here
+        foreach($result as $valuesToOutput){
+            $wineryname = $valuesToOutput['winery_name'];
+            break;
+        }
+
+        /////////////
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT COUNT(*) AS wine_count FROM wine JOIN winery ON wine.wineryid = winery.wineryid JOIN user ON winery.winery_manager = user.userid WHERE user.userID = ?;");
+        $success = $stmt->execute(array($managerkey));
+        $wineCount = $stmt->fetchColumn();
+        
+        ///////////
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT COUNT(*) AS review_count FROM review JOIN wine ON review.wineID = wine.wineID JOIN winery ON wine.wineryID = winery.wineryID JOIN user ON winery.winery_manager = user.userid WHERE user.userID = ?;");
+        $success = $stmt->execute(array($managerkey));
+        $reviewcount = $stmt->fetchColumn();
+
+        ///////////
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT AVG(points) AS review_count FROM review JOIN wine ON review.wineID = wine.wineID JOIN winery ON wine.wineryID = winery.wineryID JOIN user ON winery.winery_manager = user.userid WHERE user.userID = ?;");
+        $success = $stmt->execute(array($managerkey));
+        $avgpoints = $stmt->fetchColumn();
+
+        ////
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT *
+        FROM wine
+        JOIN winery ON wine.wineryID = winery.wineryID
+        JOIN user ON winery.winery_manager = user.userid
+        WHERE user.userid = ? AND wine.wineID > ? LIMIT 10");
+        $success = $stmt->execute(array($managerkey, $last_id));
+
+        $result = $stmt->fetchAll();
+        $arrayValues = [];
+        //use return data over here
+        foreach($result as $valuesToOutput){
+            $WineObject = new stdClass();
+            if(isset($valuesToOutput['wineID']))$WineObject->wineID = $valuesToOutput['wineID'];
+            if(isset($valuesToOutput['wine_name']))$WineObject->wine_name = $valuesToOutput['wine_name'];
+            if(isset($valuesToOutput['varietal']))$WineObject->varietal = $valuesToOutput['varietal'];
+            if(isset($valuesToOutput['carbonation']))$WineObject->carbonation = $valuesToOutput['carbonation'];
+            if(isset($valuesToOutput['sweetness']))$WineObject->sweetness = $valuesToOutput['sweetness'];
+            if(isset($valuesToOutput['colour']))$WineObject->colour = $valuesToOutput['colour'];
+            if(isset($valuesToOutput['vintage']))$WineObject->vintage = $valuesToOutput['vintage'];
+            array_push($arrayValues, $WineObject);
+
+        }
+        $data = array(
+            "wineryname" => $wineryname, 
+            "wineCount" => $wineCount, 
+            "reviewcount"=> $reviewcount, 
+            "avgpoints" => $avgpoints,
+            "wines" => $arrayValues
+        );
+
+        return $this->constructResponseObject($data, "success");
+
+    }
+
     public function getWineriesORManagersAdmin($type, $last_id = 0){
         session_start();
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
@@ -758,6 +874,20 @@ class Api extends config{
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
         return $this->constructResponseObject("deleted winery", "success");
     }
+
+    public function addWine($wine_name, $varietal, $carbonation, $sweetness, $colour, 
+        $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
+
+    }
+
+    public function editWine($wine_name, $varietal, $carbonation, $sweetness, $colour, 
+        $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
+
+    }
+
+    public function deleteWine($id){
+
+    }
     
     /**
     *@brief Creates an error based on the passed in parameter error type
@@ -795,6 +925,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     }
     else if($USERREQUEST->type == REQUESTYPE::LOGIN_ADMIN->value){
         echo $apiconfig->loginAdmin($USERREQUEST->key);
+    }
+    else if($USERREQUEST->type == REQUESTYPE::LOGIN_MANAGER->value){
+        echo $apiconfig->loginManager($USERREQUEST->username, $USERREQUEST->password);
     }
     else if($USERREQUEST->type == REQUESTYPE::LOGOUT->value){
         $apiconfig->logout();
@@ -853,6 +986,20 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
             $USERREQUEST->wineryManagerID, $USERREQUEST->isverified, $USERREQUEST->description
         );
     }
+    else if($USERREQUEST->type == REQUESTYPE::ADD_WINE->value){
+        echo $apiconfig->addWine($USERREQUEST->wine_name, $USERREQUEST->varietal, $USERREQUEST->carbonation,
+            $USERREQUEST->sweetness, $USERREQUEST->colour, $USERREQUEST->vintage, $USERREQUEST->year_bottled, 
+            $USERREQUEST->wine_imageURL, $USERREQUEST->pointScore, $USERREQUEST->currency, $USERREQUEST->price_amount,
+            $USERREQUEST->alcohol_percentage
+        );
+    }
+    else if($USERREQUEST->type == REQUESTYPE::EDIT_WINE->value){
+        echo $apiconfig->editWine($USERREQUEST->wine_name, $USERREQUEST->varietal, $USERREQUEST->carbonation,
+            $USERREQUEST->sweetness, $USERREQUEST->colour, $USERREQUEST->vintage, $USERREQUEST->year_bottled, 
+            $USERREQUEST->wine_imageURL, $USERREQUEST->pointScore, $USERREQUEST->currency, $USERREQUEST->price_amount,
+            $USERREQUEST->alcohol_percentage
+        );
+    }
     else echo $json;
 }
 else if($_SERVER["REQUEST_METHOD"] == "GET"){
@@ -888,5 +1035,11 @@ else if($_SERVER["REQUEST_METHOD"] == "GET"){
     }
     else if($_GET['type'] == REQUESTYPE::GET_WINE_REVIEWS->value){
         echo $apiconfig->getWineReviews($_GET['wineID']);
+    }
+    else if($_GET['type'] == REQUESTYPE::LOAD_MANAGER_DATA->value){
+        echo $apiconfig->loadManagersData($_GET['last_id']);
+    }
+    else if($_GET['type'] == REQUESTYPE::DELETE_WINE->value){
+        echo $apiconfig->deleteWine($_GET['wineID']);
     }
 }

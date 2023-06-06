@@ -88,13 +88,28 @@
                         '</div><!--will only show for logged in users-->'.
                     '</a>';
             }
+            else if(isset($_SESSION["managerkey"]) && isset($_SESSION["managerusername"])){
+              echo '<a href="profile.php"><!--check whether a user is manager and conditionally render-->'.
+                        '<div class="btn btn-black btn-rounded title-username">'.
+                            '<i class="fa-regular fa-user pe-2"></i>'. $_SESSION["managerusername"] .
+                        '</div><!--will only show for logged in users-->'.
+                    '</a>';
+            }
             else if(isset($_SESSION['adminkey'])) echo '<a class="btn btn-black btn-rounded title-username" href="admin.php">Admin</a>';
             else echo '<a class="btn btn-black btn-rounded title-username" href="login.php">Login/Signup</a>';
-
             ?>
           </li>
           <?php
             if(isset($_SESSION['username']) || isset($_SESSION['adminkey'])){
+              echo '<li class="nav-item">'.
+                      '<div data-bs-toggle="modal" data-bs-target="#confirmLogout">'.
+                        '<a class="nav-link mx-2 title-logout" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">'.
+                          '<i class="fa-solid fa-arrow-right-from-bracket pe-2"></i>'.
+                        '</a><!--will only show for logged in users-->'.
+                      '</div>'.
+                    '</li>';
+            }
+            else if(isset($_SESSION['managerkey'])){
               echo '<li class="nav-item">'.
                       '<div data-bs-toggle="modal" data-bs-target="#confirmLogout">'.
                         '<a class="nav-link mx-2 title-logout" href="#" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Logout">'.

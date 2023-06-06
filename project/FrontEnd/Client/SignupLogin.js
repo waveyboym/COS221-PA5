@@ -49,7 +49,7 @@ const toggleSignUpLogin = function(){
     else{
         document.querySelector(".signup-login-box").innerHTML = '<form action="#" method="post" onsubmit="return validateLogin()" class="needs-validation">' +
             '<div class="row align-items-center rounded-right-3">' +
-                '<div class="header-text mb-4">' +
+                '<div class="header-text mb-2">' +
                     '<h3>Welcome back to Winery SA</h3>' +
                     '<p>We are glad to see you again</p>' +
                 '</div>' +
@@ -62,10 +62,13 @@ const toggleSignUpLogin = function(){
                 '<div class="input-group mb-3">' +
                     '<input type="submit" class="btn btn-lg w-100 fs-6 login-btn" value="Login">' +
                 '</div>' +
-                '<div class="input-group mb-3">' +
+                '<div class="input-group mb-1">' +
                     '<button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleSignUpLogin()">Don\'t have an account? Signup instead</button>' +
                 '</div>'+
-                '<div class="input-group mb-3">' +
+                '<div class="input-group mb-1">' +
+                    '<button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleManagerLogin()">I am a winery manager</button>' +
+                '</div>' +
+                '<div class="input-group mb-2">' +
                     '<button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleAdminLogin()">I am an admin</button>' +
                 '</div>' +
                 '<p class="text-danger error-container"></p>'+
@@ -96,6 +99,31 @@ const toggleAdminLogin = function(){
         '</form>';
         currentSelectionLogin = false;
 };
+
+const toggleManagerLogin = function(){
+    document.querySelector(".signup-login-box").innerHTML = '<form action="#" method="post" onsubmit="return loginManager()" class="needs-validation">' +
+            '<div class="row align-items-center rounded-right-3">' +
+                '<div class="header-text mb-4">' +
+                    '<h3>Welcome back to Winery SA</h3>' +
+                    '<p>We are glad to see you again</p>' +
+                '</div>' +
+                '<div class="input-group mb-3 was-validated">' +
+                    '<input type="email" id="email" class="form-control form-control-lg bg-light fs-6" placeholder="email address" required/>' +
+                '</div>' +
+                '<div class="input-group mb-3 was-validated">' +
+                    '<input type="password"  id="password" class="form-control form-control-lg bg-light fs-6" placeholder="password" required/>' +
+                '</div>' +
+                '<div class="input-group mb-3">' +
+                    '<input type="submit" class="btn btn-lg w-100 fs-6 login-btn" value="Login">' +
+                '</div>' +
+                '<div class="input-group mb-3">' +
+                    '<button class="btn btn-lg btn-light w-100 fs-6 no-account-btn" onclick="toggleSignUpLogin()">I\'m not a manager</button>' +
+                '</div>'+
+                '<p class="text-danger error-container"></p>'+
+            '</div>'+
+        '</form>';
+        currentSelectionLogin = false;
+}
 
 /**
  * Signup Json:
@@ -285,3 +313,34 @@ const loginAdmin = function(){
     return false;
 };
 
+const loginManager = function(){
+    const managerusername = document.getElementById("email").value;
+    const managerpassword = document.getElementById("password").value;
+
+    if(managerusername === "" || managerpassword === ""){
+        document.querySelector(".error-container").innerHTML = "please fill in the form";
+        return false;
+    }
+
+    //add backend code here
+    //json to be sent to api
+    const req = new XMLHttpRequest;
+
+    req.onreadystatechange = function(){//recieves api response
+        if(req.readyState == 4 && req.status == 200)
+        {
+            console.log(req.responseText);
+            const jRes = JSON.parse(req.responseText);
+
+            if(jRes.status === 'success'){
+                window.location.href = "manager.php";
+            }
+            else if(jRes.status == 'error')document.querySelector(".error-container").innerHTML = jRes.data;
+        }
+    }
+
+    req.open('POST', '../../Backend/Api/Api.php');
+    req.send(JSON.stringify({'type': 'LOGIN_MANAGER', 'username': managerusername, 'password': managerpassword}));
+    //end backend code here
+    return false;
+}

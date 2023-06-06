@@ -15,8 +15,7 @@
   <!-- COMMENT OUT THE SECOND LINE OF PHP IF YOU CANNOT LOG IN, FOR TESTING PURPOSES
     <?php 
       include "../Components/Navbar.php";
-      
-      if(!isset($_SESSION['managerkey']) || !isset($_SESSION['adminkey']))header("Location: index.php");
+      if(!isset($_SESSION['managerkey']) && !isset($_SESSION['adminkey']))header("Location: index.php");
       
     ?>
     (login functionality actually taking me to managers.php does not seem to be working for me)-->
@@ -80,7 +79,7 @@
                 WHERE user.username = 'LisaWilbourn'
                 LIMIT 1;
               -->
-              <h2 class="card-text">PLACEHOLDER</h2>
+              <h2 class="card-text Winery-name"></h2>
             </div>
           </div>
         </div>
@@ -97,7 +96,7 @@
                   JOIN user ON winery.winery_manager = user.userid
                   WHERE user.username = 'USERNAME; 
               -->
-              <h2 class="card-text">PLACEHOLDER</h2>
+              <h2 class="card-text Total-wines"></h2>
             </div>
           </div>
         </div>
@@ -105,7 +104,7 @@
           <div class="card-body">
             <h5 class="card-title">Total reviews</h5>
             <div class="card-icon-and-count">
-              <i class="fa-solid fa-person pe-3" style="font-size: 1.5rem;"></i>
+              <i class="fa-solid fa-star" style="font-size: 1.5rem;"></i>
               <!-- This card's text should load in the count of the reviews associated with wines at the manager's assigned winery. -->
               <!-- The SQL query that should be used could look something like the below comment. -->
               <!-- SELECT COUNT(*) AS wine_count
@@ -116,7 +115,7 @@
                   JOIN user ON winery.winery_manager = user.userid
                   WHERE user.username = 'USERNAME';
               -->
-              <h2 class="card-text">PLACEHOLDER</h2>
+              <h2 class="card-text Total-reviews"></h2>
             </div>
           </div>
         </div>
@@ -124,7 +123,7 @@
           <div class="card-body">
             <h5 class="card-title">Average score</h5>
             <div class="card-icon-and-count">
-              <i class="fa-solid fa-people-roof pe-3" style="font-size: 1.5rem;"></i>
+              <i class="fa-solid fa-percent pe-3" style="font-size: 1.5rem;"></i>
               <!-- This card's text should load in the average score of the reviews associated with wines at the manager's assigned winery. -->
               <!-- The SQL query that should be used could look something like the below comment. -->
               <!-- SELECT COUNT(*) AS wine_count
@@ -135,19 +134,20 @@
                   JOIN user ON winery.winery_manager = user.userid
                   WHERE user.username = 'USERNAME';
               -->
-              <h2 class="card-text">PLACEHOLDER</h2>
+              <h2 class="card-text Average-score"></h2>
             </div>
           </div>
         </div>
       </nav>
       <nav class="list-of-various-elements">
         <nav class="navigation-tabs-for-list">
-          <div class="btn btn-primary btns-click">add wine</div>
+          <div class="btn btn-primary btns-click" style="margin-left: auto; margin-right: auto;" data-bs-toggle="modal" data-bs-target="#addwine">add wine</div>
         </nav>
         <nav class="container-of-data list-group">
-          <table class="table">
+          <table class="table mb-3">
             <thead>
               <tr>
+                <th scope="col">id</th>
                 <th scope="col">Wine name</th>
                 <th scope="col">Varietal</th>
                 <th scope="col">Carbonation</th>
@@ -158,140 +158,98 @@
                 <th scope="col invisible-row-col">#</th>
               </tr>
             </thead>
-            <tbody>
-              <tr>
-                <td>Montrachet Grand Cru 2010</td>
-                <td>Johannisberg</td>
-                <td>sparkling</td>
-                <td>Medium/off dry</td>
-                <td>white</td>
-                <td>2010</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Montrachet Grand Cru 2014</td>
-                <td>Moscatel</td>
-                <td>still</td>
-                <td>Very sweet</td>
-                <td>white</td>
-                <td>2014</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Meursault Les Rougeots 2001</td>
-                <td>Fernão Pires</td>
-                <td>still</td>
-                <td>Dry</td>
-                <td>white</td>
-                <td>2001</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Corton-Charlemagne Grand Cru N.V.</td>
-                <td>Emir</td>
-                <td>semi-sparkling</td>
-                <td>Medium/off dry</td>
-                <td>white</td>
-                <td>1968</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Estate Finch Hollow Chardonnay (Cave Fermented) 2014</td>
-                <td>Laški Rizling</td>
-                <td>still</td>
-                <td>Medium/off dry</td>
-                <td>white</td>
-                <td>2014</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Y 1996</td>
-                <td>Códega de Larinho</td>
-                <td>semi-sparkling</td>
-                <td>Very sweet</td>
-                <td>white</td>
-                <td>1996</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Bâtard-Montrachet Grand Cru 1996</td>
-                <td>Merseguera</td>
-                <td>sparkling</td>
-                <td>Dry</td>
-                <td>white</td>
-                <td>1996</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Montrachet Grand Cru Marquis de Laguiche 2004</td>
-                <td>Fiano</td>
-                <td>still</td>
-                <td>Dry</td>
-                <td>white</td>
-                <td>2004</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-              <tr>
-                <td>Meursault Les Rougeots 2005</td>
-                <td>Garganega</td>
-                <td>semi-sparkling</td>
-                <td>Medium/off dry</td>
-                <td>white</td>
-                <td>2005</td>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-trash action-btn"></i>
-                </th>
-                <th scope="row action-btns">
-                  <i class="fa-solid fa-edit action-btn"></i>
-                </th>
-              </tr>
-          
-            </tbody>
+            <tbody></tbody>
+
           </table>
+          <button class="btn btn-primary btns-click" style="width: 150px; margin-left: auto; margin-right: auto;" onmouseup="loadMoreData()">Load More</button>
         </nav>
       </nav>
     </nav>
-  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+  
+    <!-- add -->
+    <div class="modal fade" id="addwine" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="exampleModalLabel">Add new wine</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="wine-name-input" class="form-label text-dark">Wine name</label>
+              <input type="text" class="form-control" id="wine-name-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-varietal-input" class="form-label text-dark">Varietal</label>
+              <input type="text" class="form-control" id="wine-varietal-input">
+            </div>
+            <div class="mb-3">
+              <label for="winery-carbonation-input" class="form-label text-dark">Carbonation</label>
+              <input type="text" class="form-control" id="winery-websiteurl-input">
+            </div>
+            <div class="mb-3">
+              <label for="winery-location-input" class="form-label text-dark">Winery location address</label>
+              <input type="text" class="form-control" id="winery-location-input">
+            </div>
+            <div class="mb-3">
+              <label for="winery-country-input" class="form-label text-dark">Country of winery</label>
+              <input type="text" class="form-control" id="winery-country-input">
+            </div>
+            <div class="mb-3">
+              <label for="winery-region-input" class="form-label text-dark">Region of winery</label>
+              <input type="text" class="form-control" id="winery-region-input">
+            </div>
+            <div class="mb-3 input-group">
+              <span class="input-group-text text-dark">Longitude and latitude</span>
+              <input type="text" aria-label="longitude" class="form-control" id="longitude">
+              <input type="text" aria-label="latitude" class="form-control"  id="latitude">
+            </div>
+            <div class="mb-3">
+              <label for="winery-managerid-input" class="form-label text-dark">Winery manager id</label>
+              <input type="text" class="form-control" id="winery-managerid-input">
+            </div>
+            <div class="mb-3 form-check">
+              <input type="checkbox" class="form-check-input" id="winery-isVerified-input">
+              <label class="form-check-label text-dark" for="winery-isVerified-input">is a verified winery</label>
+            </div>
+            <div class="form-floating mb-3">
+              <textarea class="form-control text-dark" placeholder="Winery description" id="floatingTextarea2" style="height: 100px"></textarea>
+              <label for="floatingTextarea2 text-dark">Winery description</label>
+            </div>
+            <div class="form-error-container mb-3">
+              <label for="text-danger" class="text-danger"></label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btns-click" style="background-color: var(--app-theme-col);" onmouseup="addWine()" data-bs-dismiss="modal">Create new winery</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <!-- delete confirm -->
+        <!-- Modal -->
+    <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="exampleModalLabel">Confirm deletion</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <label for="text-dark" class="text-dark">Are you sure you want to delete this wine</label>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">No</button>
+            <button type="button" class="btn btn-primary btns-click" style="background-color: var(--app-theme-col);" onmouseup="deleteWine()" data-bs-dismiss="modal">Yes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js" integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js" integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+  <script src="../Client/manager.js"></script>
 </body>
 </html>

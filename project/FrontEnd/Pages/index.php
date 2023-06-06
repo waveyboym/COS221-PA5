@@ -15,6 +15,7 @@
 <body>
     <?php
      include "../Components/Navbar.php";
+     if(isset($_SESSION['managerkey']))header("Location: manager.php");
      if(isset($_SESSION['adminkey']))header("Location: admin.php");
      ?>
      <div class="landing-page-bg">
