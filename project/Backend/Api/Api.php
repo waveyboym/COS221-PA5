@@ -877,16 +877,124 @@ class Api extends config{
 
     public function addWine($wine_name, $varietal, $carbonation, $sweetness, $colour, 
         $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
+            session_start();
+            $managerkey = $_SESSION["managerkey"];
 
+            $conn = $this->connectToDataBase();
+            $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+            $success = $stmt->execute(array($managerkey));
+
+            if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+
+            if($stmt->rowCount() == 0)return $this->constructResponseObject("No manager exists with your key", "error");
+
+            ///
+
+            $stmt = $conn->prepare("INSERT INTO wine (wineryID,wine_name,varietal,carbonation,sweetness,colour,vintage,year_bottled,wine_imageURL,pointScore,currency,price_amount,alcohol_percentage) VALUES
+             (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);");
+            $success = $stmt->execute(array($managerkey, $wine_name, $varietal, $carbonation, $sweetness, $colour, 
+            $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage));
+
+            if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            else return $this->constructResponseObject("", "success");
+ 
     }
 
-    public function editWine($wine_name, $varietal, $carbonation, $sweetness, $colour, 
+    public function editWine($wineID, $wine_name, $varietal, $carbonation, $sweetness, $colour, 
         $vintage, $year_bottled, $wine_imageURL, $pointScore, $currency, $price_amount, $alcohol_percentage){
+            session_start();
+            $managerkey = $_SESSION["managerkey"];
 
+            $conn = $this->connectToDataBase();
+            $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+            $success = $stmt->execute(array($managerkey));
+
+            if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+
+            if($stmt->rowCount() == 0)return $this->constructResponseObject("No manager exists with your key", "error");
+
+            
+            if($wine_name != null){
+                $stmt = $conn->prepare("UPDATE wine SET wine_name = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($wine_name, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($varietal != null){
+                $stmt = $conn->prepare("UPDATE wine SET varietal = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($varietal, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($carbonation != null){
+                $stmt = $conn->prepare("UPDATE wine SET carbonation = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($carbonation, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($sweetness != null){
+                $stmt = $conn->prepare("UPDATE wine SET sweetness = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($sweetness, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($colour != null){
+                $stmt = $conn->prepare("UPDATE wine SET colour = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($colour, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($vintage != null){
+                $stmt = $conn->prepare("UPDATE wine SET vintage = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($vintage, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($year_bottled != null){
+                $stmt = $conn->prepare("UPDATE wine SET year_bottled = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($year_bottled, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($wine_imageURL != null){
+                $stmt = $conn->prepare("UPDATE wine SET wine_imageURL = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($wine_imageURL, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($pointScore != null){
+                $stmt = $conn->prepare("UPDATE wine SET pointScore = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($pointScore, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($currency != null){
+                $stmt = $conn->prepare("UPDATE wine SET currency = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($currency, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($price_amount != null){
+                $stmt = $conn->prepare("UPDATE wine SET price_amount = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($price_amount, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            if($alcohol_percentage != null){
+                $stmt = $conn->prepare("UPDATE wine SET alcohol_percentage = ? WHERE wineID = ?;");
+                $success = $stmt->execute(array($alcohol_percentage, $wineID));
+                if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+            }
+            
+            return $this->constructResponseObject("", "success");
     }
 
     public function deleteWine($id){
+        session_start();
+        $managerkey = $_SESSION["managerkey"];
 
+        $conn = $this->connectToDataBase();
+        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $success = $stmt->execute(array($managerkey));
+
+        if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+
+        if($stmt->rowCount() == 0)return $this->constructResponseObject("No manager exists with your key", "error");
+
+        $stmt = $conn->prepare("DELETE FROM wine WHERE wineID = ?;");
+        $success = $stmt->execute(array($id));
+
+        if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
+        return $this->constructResponseObject("deleted winery", "success");
     }
     
     /**
@@ -994,7 +1102,7 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
         );
     }
     else if($USERREQUEST->type == REQUESTYPE::EDIT_WINE->value){
-        echo $apiconfig->editWine($USERREQUEST->wine_name, $USERREQUEST->varietal, $USERREQUEST->carbonation,
+        echo $apiconfig->editWine($USERREQUEST->wineID,$USERREQUEST->wine_name, $USERREQUEST->varietal, $USERREQUEST->carbonation,
             $USERREQUEST->sweetness, $USERREQUEST->colour, $USERREQUEST->vintage, $USERREQUEST->year_bottled, 
             $USERREQUEST->wine_imageURL, $USERREQUEST->pointScore, $USERREQUEST->currency, $USERREQUEST->price_amount,
             $USERREQUEST->alcohol_percentage

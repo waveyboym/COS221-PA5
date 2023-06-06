@@ -16,7 +16,6 @@
     <?php 
       include "../Components/Navbar.php";
       if(!isset($_SESSION['managerkey']) && !isset($_SESSION['adminkey']))header("Location: index.php");
-      
     ?>
     (login functionality actually taking me to managers.php does not seem to be working for me)-->
 
@@ -175,46 +174,53 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="mb-3">
-              <label for="wine-name-input" class="form-label text-dark">Wine name</label>
-              <input type="text" class="form-control" id="wine-name-input">
+          <div class="mb-3">
+              <label for="wine-name-add-input" class="form-label text-dark">Wine name</label>
+              <input type="text" class="form-control" id="wine-name-add-input">
             </div>
             <div class="mb-3">
-              <label for="wine-varietal-input" class="form-label text-dark">Varietal</label>
-              <input type="text" class="form-control" id="wine-varietal-input">
+              <label for="wine-varietal-add-input" class="form-label text-dark">Varietal</label>
+              <input type="text" class="form-control" id="wine-varietal-add-input">
             </div>
             <div class="mb-3">
-              <label for="winery-carbonation-input" class="form-label text-dark">Carbonation</label>
-              <input type="text" class="form-control" id="winery-websiteurl-input">
+              <label for="wine-carbonation-add-input" class="form-label text-dark">Carbonation</label>
+              <input type="text" class="form-control" id="wine-carbonation-add-input">
             </div>
             <div class="mb-3">
-              <label for="winery-location-input" class="form-label text-dark">Winery location address</label>
-              <input type="text" class="form-control" id="winery-location-input">
+              <label for="wine-sweetness-add-input" class="form-label text-dark">Sweetness</label>
+              <input type="text" class="form-control" id="wine-sweetness-add-input">
             </div>
             <div class="mb-3">
-              <label for="winery-country-input" class="form-label text-dark">Country of winery</label>
-              <input type="text" class="form-control" id="winery-country-input">
+              <label for="wine-colour-add-input" class="form-label text-dark">Colour</label>
+              <input type="text" class="form-control" id="wine-colour-add-input">
             </div>
             <div class="mb-3">
-              <label for="winery-region-input" class="form-label text-dark">Region of winery</label>
-              <input type="text" class="form-control" id="winery-region-input">
-            </div>
-            <div class="mb-3 input-group">
-              <span class="input-group-text text-dark">Longitude and latitude</span>
-              <input type="text" aria-label="longitude" class="form-control" id="longitude">
-              <input type="text" aria-label="latitude" class="form-control"  id="latitude">
+              <label for="wine-vintage-add-input" class="form-label text-dark">Vintage</label>
+              <input type="text" class="form-control" id="wine-vintage-add-input">
             </div>
             <div class="mb-3">
-              <label for="winery-managerid-input" class="form-label text-dark">Winery manager id</label>
-              <input type="text" class="form-control" id="winery-managerid-input">
+              <label for="wine-year_bottled-add-input" class="form-label text-dark">Year bottled</label>
+              <input type="text" class="form-control" id="wine-year_bottled-add-input">
             </div>
-            <div class="mb-3 form-check">
-              <input type="checkbox" class="form-check-input" id="winery-isVerified-input">
-              <label class="form-check-label text-dark" for="winery-isVerified-input">is a verified winery</label>
+            <div class="mb-3">
+              <label for="wine-wine_imageURL-add-input" class="form-label text-dark">Image url</label>
+              <input type="text" class="form-control" id="wine-wine_imageURL-add-input">
             </div>
-            <div class="form-floating mb-3">
-              <textarea class="form-control text-dark" placeholder="Winery description" id="floatingTextarea2" style="height: 100px"></textarea>
-              <label for="floatingTextarea2 text-dark">Winery description</label>
+            <div class="mb-3">
+              <label for="wine-pointScore-add-input" class="form-label text-dark">Point Score</label>
+              <input type="text" class="form-control" id="wine-pointScore-add-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-currency-add-input" class="form-label text-dark">Currency</label>
+              <input type="text" class="form-control" id="wine-currency-add-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-price_amount-add-input" class="form-label text-dark">Price amount</label>
+              <input type="text" class="form-control" id="wine-price_amount-add-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-alcohol_percentage-add-input" class="form-label text-dark">Alcohol percentage</label>
+              <input type="text" class="form-control" id="wine-alcohol_percentage-add-input">
             </div>
             <div class="form-error-container mb-3">
               <label for="text-danger" class="text-danger"></label>
@@ -222,12 +228,82 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btn-primary btns-click" style="background-color: var(--app-theme-col);" onmouseup="addWine()" data-bs-dismiss="modal">Create new winery</button>
+            <button type="button" class="btn btn-primary btns-click" style="background-color: var(--app-theme-col);" onmouseup="addWine()" data-bs-dismiss="modal">Add a new wine</button>
           </div>
         </div>
       </div>
     </div>
   
+    <!-- edit -->
+    <div class="modal fade" id="editwine" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title text-dark" id="exampleModalLabel">Edit wine</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="mb-3">
+              <label for="wine-name-edit-input" class="form-label text-dark">Wine name</label>
+              <input type="text" class="form-control" id="wine-name-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-varietal-edit-input" class="form-label text-dark">Varietal</label>
+              <input type="text" class="form-control" id="wine-varietal-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-carbonation-edit-input" class="form-label text-dark">Carbonation</label>
+              <input type="text" class="form-control" id="wine-carbonation-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-sweetness-edit-input" class="form-label text-dark">Sweetness</label>
+              <input type="text" class="form-control" id="wine-sweetness-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-colour-edit-input" class="form-label text-dark">Colour</label>
+              <input type="text" class="form-control" id="wine-colour-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-vintage-edit-input" class="form-label text-dark">Vintage</label>
+              <input type="text" class="form-control" id="wine-vintage-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-year_bottled-edit-input" class="form-label text-dark">Year bottled</label>
+              <input type="text" class="form-control" id="wine-year_bottled-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-wine_imageURL-edit-input" class="form-label text-dark">Image url</label>
+              <input type="text" class="form-control" id="wine-wine_imageURL-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-pointScore-edit-input" class="form-label text-dark">Point Score</label>
+              <input type="text" class="form-control" id="wine-pointScore-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-currency-edit-input" class="form-label text-dark">Currency</label>
+              <input type="text" class="form-control" id="wine-currency-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-price_amount-edit-input" class="form-label text-dark">Price amount</label>
+              <input type="text" class="form-control" id="wine-price_amount-edit-input">
+            </div>
+            <div class="mb-3">
+              <label for="wine-alcohol_percentage-edit-input" class="form-label text-dark">Alcohol percentage</label>
+              <input type="text" class="form-control" id="wine-alcohol_percentage-edit-input">
+            </div>
+            <div class="form-error-container mb-3">
+              <label for="text-danger" class="text-danger"></label>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary btns-click" style="background-color: var(--app-theme-col);" onmouseup="editWine()" data-bs-dismiss="modal">Save changes</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+
     <!-- delete confirm -->
         <!-- Modal -->
     <div class="modal fade" id="confirmDelete" tabindex="-1" aria-labelledby="ModalLabel" aria-hidden="true">

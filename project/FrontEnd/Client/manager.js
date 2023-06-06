@@ -1,4 +1,4 @@
-let currentlySelectedWinery = "";
+let currentlySelectedWine = "";
 let lastServedID = "";
 let lastcount = 1;
 
@@ -30,18 +30,18 @@ const switchOnLoader = function(){
 const switchOffLoader = function(){document.querySelector(".spinner-container").remove();}
 
 const addWine = function(){
-    const wine_name = document.getElementById("winery-name-input").value;
-    const varietal = document.getElementById("winery-imageurl-input").value;
-    const carbonation = document.getElementById("winery-websiteurl-input").value;
-    const sweetness = document.getElementById("winery-location-input").value;
-    const colour = document.getElementById("winery-country-input").value;
-    const vintage = document.getElementById("winery-region-input").value;
-    const year_bottled = document.getElementById("longitude").value;
-    const wine_imageURL = document.getElementById("latitude").value;
-    const pointScore = document.getElementById("winery-managerid-input").value;
-    const currency = document.getElementById("winery-isVerified-input").checked;
-    const price_amount = document.getElementById("floatingTextarea2").value;
-    const alcohol_percentage = document.getElementById("floatingTextarea2").value;
+    const wine_name = "Montrachet Grand Cru 1805";//document.getElementById("wine-name-add-input").value;
+    const varietal =  "Johannisberg"; //document.getElementById("wine-varietal-add-input").value;
+    const carbonation = "sparkling";//document.getElementById("wine-carbonation-add-input").value;
+    const sweetness = "Medium/off dry";//document.getElementById("wine-sweetness-add-input").value;
+    const colour = "white";//document.getElementById("wine-colour-add-input").value;
+    const vintage = "2010"; //document.getElementById("wine-vintage-add-input").value;
+    const year_bottled = "2011";// document.getElementById("wine-year_bottled-add-input").value;
+    const wine_imageURL = "https://images.vivino.com/thumbs/rORmihtxSrKG7SfuI0bD6w_pb_x300.png"; //document.getElementById("wine-wine_imageURL-add-input").value;
+    const pointScore = "98"; // document.getElementById("wine-pointScore-add-input").value;
+    const currency = "ZAR"; //document.getElementById("wine-currency-add-input").checked;
+    const price_amount = "179";// document.getElementById("wine-price_amount-add-input").value;
+    const alcohol_percentage = "17.10";// document.getElementById("wine-alcohol_percentage-add-input").value;
 
     if(wine_name === "" || varietal === "" || carbonation === "" || sweetness === ""
     || colour === "" || vintage === "" || year_bottled === "" || wine_imageURL === "" 
@@ -57,7 +57,9 @@ const addWine = function(){
     xhttpObject.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200){
             switchOffLoader();
+            document.querySelector(".container-of-data .table tbody").innerHTML = "";
             lastServedID = 0;
+            lastcount = 1;
             loadMoreData();
         }
     };
@@ -84,18 +86,18 @@ const addWine = function(){
 }
 
 const editWine = function(){
-    const wine_name = document.getElementById("winery-name-input").value;
-    const varietal = document.getElementById("winery-imageurl-input").value;
-    const carbonation = document.getElementById("winery-websiteurl-input").value;
-    const sweetness = document.getElementById("winery-location-input").value;
-    const colour = document.getElementById("winery-country-input").value;
-    const vintage = document.getElementById("winery-region-input").value;
-    const year_bottled = document.getElementById("longitude").value;
-    const wine_imageURL = document.getElementById("latitude").value;
-    const pointScore = document.getElementById("winery-managerid-input").value;
-    const currency = document.getElementById("winery-isVerified-input").checked;
-    const price_amount = document.getElementById("floatingTextarea2").value;
-    const alcohol_percentage = document.getElementById("floatingTextarea2").value;
+    const wine_name = document.getElementById("wine-name-edit-input").value;
+    const varietal = document.getElementById("wine-varietal-edit-input").value;
+    const carbonation = document.getElementById("wine-carbonation-edit-input").value;
+    const sweetness = document.getElementById("wine-sweetness-edit-input").value;
+    const colour = document.getElementById("wine-colour-edit-input").value;
+    const vintage = document.getElementById("wine-vintage-edit-input").value;
+    const year_bottled = document.getElementById("wine-year_bottled-edit-input").value;
+    const wine_imageURL = document.getElementById("wine-wine_imageURL-edit-input").value;
+    const pointScore = document.getElementById("wine-pointScore-edit-input").value;
+    const currency = document.getElementById("wine-currency-edit-input").checked;
+    const price_amount = document.getElementById("wine-price_amount-edit-input").value;
+    const alcohol_percentage = document.getElementById("wine-alcohol_percentage-edit-input").value;
 
     if(wine_name === "" && varietal === "" && carbonation === "" && sweetness === ""
     && colour === "" && vintage === "" && year_bottled === "" && wine_imageURL === "" 
@@ -111,13 +113,16 @@ const editWine = function(){
     xhttpObject.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200){
             switchOffLoader();
+            document.querySelector(".container-of-data .table tbody").innerHTML = "";
             lastServedID = 0;
+            lastcount = 1;
             loadMoreData();
         }
     };
 
     const body = JSON.stringify({
         "type": "EDIT_WINE",
+        "wineID": currentlySelectedWine,
         "wine_name": wine_name === "" ? null : wine_name,
         "varietal": varietal === "" ? null : varietal ,
         "carbonation": carbonation === "" ? null : carbonation ,
@@ -144,18 +149,14 @@ const deleteWine = function(){
     xhttpObject.onreadystatechange = function() {
         if(this.readyState == 4 && this.status == 200){
             switchOffLoader();
-            if(currentlyOpenTab === "wineries"){
-                currentlyOpenTab = "managers";
-                viewWineries();
-            }
-            else{
-                currentlyOpenTab = "wineries";
-                viewManagers();
-            }
+            document.querySelector(".container-of-data .table tbody").innerHTML = "";
+            lastServedID = 0;
+            lastcount = 1;
+            loadMoreData();
         }
     };
 
-    xhttpObject.open("GET", "../../Backend/Api/Api.php?type=DELETE_WINERY_ADMIN&wineryID=" + currentlySelectedWinery);
+    xhttpObject.open("GET", "../../Backend/Api/Api.php?type=DELETE_WINE&wineID=" + currentlySelectedWine);
     xhttpObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
     xhttpObject.send();
 }
@@ -191,11 +192,12 @@ const populateData = function(jsonData){
                                 '</th>' +
                             '</tr>';
     }
-    lastServedID = res.data.wines[res.data.wines.length - 1].wineID;
+    if(res.data.wines.length > 0)
+        lastServedID = res.data.wines[res.data.wines.length - 1].wineID;
 }
 
 const setWineId = function(val){
-    currentlySelectedWinery = val;
+    currentlySelectedWine = val;
 } 
 
 const loadMoreData = function(){
