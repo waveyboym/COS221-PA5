@@ -55,7 +55,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
             wineryID = data.wineryID;
             
             document.getElementById('add_wine').innerHTML = `<div class="col-sm-4 d-flex align-items-center flex-column">
-            <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-5 me-1" style="height: 60vh; width: 18rem;">
+            <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-3 me-1" style="height: 60vh; width: 18rem;">
               <img src="${data.wine_imageURL}" class="img-fluid" style="height: 50vh;" alt="wine-img">
             </div>
             <div class="card-item mini-card-cont card card-info-container d-flex justify-content-center align-items-center rounded-3 me-1">
@@ -68,7 +68,7 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
             <div class="card card-info-container" style="width: 50rem;">
               <div class="card-body">
                 <h1 class="card-title">${data.wine_name}</h1>
-                <h3 class="card-subtitle mb-2 text-muted">${data.winery_name}</h3>
+                <h3 class="card-subtitle mb-4 text-muted">${data.winery_name}</h3>
                 <p class="card-text"></p>
                 <div class="mb-4"></div>
                 <h6>

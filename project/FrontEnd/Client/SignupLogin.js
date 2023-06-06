@@ -237,7 +237,7 @@ const validateLogin = function(){
                     var jRes = JSON.parse(res);
 
                     if(jRes.status == 'success'){
-                        makeUsernameSession(jRes.data[0].username);
+                        makeUsernameSession(jRes.data);
 
                         window.location.href = "profile.php";
                     }
