@@ -20,7 +20,7 @@
     if(isset($_SESSION['adminkey']))header("Location: admin.php");
     ?>
     <div id="add_wine" class="row w-100" style="margin-top: 100px; margin-bottom: 40px; height: calc(100vh-70px);">
-      <div class="col-sm-4 d-flex align-items-center flex-column">
+      <!-- <div class="col-sm-4 d-flex align-items-center flex-column">
         <div class="card-item card card-info-container d-flex justify-content-center align-items-center rounded-3 pe-3 mb-5 me-1" style="height: 60vh; width: 18rem;">
           <img src="{url of wine image goes here}" class="img-fluid" style="height: 50vh;" alt="wine-img">
         </div>
@@ -77,7 +77,7 @@
             <a href="#" class="card-link">Open winery</a>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
 
     <!-- Modal -->
@@ -119,7 +119,14 @@
                 <th scope="col">Reviewer</th>
               </tr>
             </thead>
-            <tbody></tbody>
+            <tbody>
+                <tr>
+                    <th scope="row"></th>
+                    <td>No Reviews</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </tbody>
           </table>
         </nav>
       </nav>

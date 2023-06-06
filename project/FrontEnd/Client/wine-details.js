@@ -17,6 +17,9 @@ const populateReviews = function(wineID){
             var jRes = JSON.parse(res);
 
             if(jRes.status = "success"){
+                if(jRes.data[0] == undefined){
+                    return;
+                }
                 for(let i in jRes.data){
                     reviewOutput += '<tr>' +
                     '<th scope="row">' + jRes.data[i].reviewID + '</th>'+
