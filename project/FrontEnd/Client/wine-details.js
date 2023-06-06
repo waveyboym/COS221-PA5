@@ -1,53 +1,51 @@
 var wineNameLocalStorage = localStorage.getItem('winery_name');
+
+
 // Send a request to the API for the wine with name: wineNameLocalStorage
 type = "SEARCH_WINE";
-// const switchOnLoader = function(){
-//     const websiteContainer = document.querySelector(".website-container");
-//     websiteContainer.innerHTML = '<div class="spinner-container">' +
-//                                     '<div class="spinner-grow text-success" role="status">' +
-//                                         '<span class="sr-only">Loading...</span>' +
-//                                     '</div>' +
-//                                 '</div>';
-// }
-// switchOnLoader();
-// Update the wine details using the response data from the API.
-const UpdateReview = function(winery_name) {
-    const xhttpObject = new XMLHttpRequest();
-    xhttpObject.onload = function() {
-        if (this.status == 200) {
-            var response = JSON.parse(this.response);
-            var data = response.data;
-            data.forEach(element => {
-                if (element.winery_name == winery_name) {
-                    UpdateReviews(element.wineryID);
-                    localStorage.setItem('wineID', element.wineryID);
+
+
+const populateReviews = function(wineID){
+    const req = new XMLHttpRequest;
+
+    req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200){
+            var reviewOutput = '';
+            const res = req.responseText;
+            var jRes = JSON.parse(res);
+
+            if(jRes.status = "success"){
+                for(let i in jRes.data){
+                    reviewOutput += '<tr>' +
+                    '<th scope="row">' + jRes.data[i].reviewID + '</th>'+
+                    '<td>' + jRes.data[i].review_description + '</td>'+
+                    '<td>' + starGeneration(jRes.data[i].points) + '</td>'+
+                    '<td>' + jRes.data[i].username + '</td>'+
+                    '</tr>';
                 }
-            });
-            console.log(response);
-        } else {
-            console.error('Request error:', this.status);
+    
+                document.querySelector('tbody').innerHTML = reviewOutput;
+            }
         }
     };
-    xhttpObject.onerror = function() {
-        console.error('Network error occurred');
-    };
-    xhttpObject.open("GET", "../../Backend/Api/Api.php?type=GET_WINERIES");
-    xhttpObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttpObject.send();
+
+    req.open("GET", '../../Backend/Api/Api.php?type=GET_WINE_REVIEWS&&wineID=' + wineID);
+    req.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    req.send();
 }
 
 const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
     const xhttpObject = new XMLHttpRequest();
     const body = JSON.stringify({
-        "type": `${type}`,
-        "name": `${wineNameLocalStorage}`
+        "type": type,
+        "name": wineNameLocalStorage
     });
 
     xhttpObject.onreadystatechange = function() {
         if (xhttpObject.readyState === 4 && xhttpObject.status === 200){
             var response = JSON.parse(xhttpObject.responseText);
             var data = response.data[0];
-            console.log(data);
+            
             document.getElementById('add_wine').innerHTML = `<div class="card mb-3 card-info-container" style="margin-top: 50px; padding: 100px;">
             <div class="row g-0">
                 <div class="col-md-4">
@@ -121,12 +119,8 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
             </div>`;
-            UpdateReview(data.wine_name);
-            // For Testing!!
-            // UpdateReviews('48');
-        } else {
-            console.log("Request failed with status: " + xhttpObject.status);
-        }
+            populateReviews(data.wineID);
+        } 
     };
     xhttpObject.open("POST", "../../Backend/Api/Api.php", true);
     xhttpObject.setRequestHeader("Content-type", "application/json");
@@ -205,7 +199,6 @@ const searchFor = function(winery_name) {
                     openWinery(element.wineryID);
                 }
             });
-            console.log(response);
         }
     };
 
@@ -214,39 +207,6 @@ const searchFor = function(winery_name) {
     xhttpObject.send();
 }
 
-const prependReview = function(data) {
-    var reviewOutput = '<tr>' +
-        '<th scope="row">' + data.reviewID + '</th>'+
-        '<td>' + data.review_description + '</td>'+
-        '<td>' + starGeneration(data.points) + '</td>'+
-        '<td>' + data.username + '</td>'+
-        '</tr>';
-    document.querySelector('tbody').insertAdjacentHTML('afterbegin', reviewOutput);
-}
-
-const UpdateReviews = function(wineID) {
-    const xhttpObject = new XMLHttpRequest();
-    xhttpObject.onload = function() {
-        if (this.status == 200) {
-            console.log(this.response);
-            var response = JSON.parse(this.response);
-            if (response.status == 'success') {
-                var data = response.data;
-                data.forEach(element => {
-                    prependReview(element);
-                });
-            }
-        } else {
-            console.error('Request error:', this.status);
-        }
-    };
-    xhttpObject.onerror = function() {
-        console.error('Network error occurred');
-    };
-    xhttpObject.open("GET", `../../Backend/Api/Api.php?type=GET_WINE_REVIEWS&&wineID=${wineID}`);
-    xhttpObject.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-    xhttpObject.send();
-}
 
 //Conversion based on the following method: https://appetiteforwine.blog/2016/02/29/how-to-rate-wine/#:~:text=Over%20the%20years%2C%20I%27ve,-94%20%3D%204.5%20Stars%2FHearts
 const starGeneration = function(points){
