@@ -26,6 +26,41 @@
 
     <div id="add_wine" style="margin-bottom: 40px">
     </div>
+
+    <div class="d-flex justify-content-center w-100">
+      <div class="btn btn-primary btns-click" style="margin-left: auto; margin-right: auto;" data-bs-toggle="modal" data-bs-target="#newReviewModal">Write Review</div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="newReviewModal" tabindex="-1" role="dialog" aria-labelledby="newReviewModalLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="newReviewModalLabel">Write a Review</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        <form>
+                                            <div class="form-group">
+                                            <label for="newReviewText">Review:</label>
+                                            <textarea class="form-control" id="newReviewText" rows="3" required></textarea>
+                                            </div>
+                                            <div class="form-group">
+                                            <label for="newPointScore">Point Score (50-100):</label>
+                                            <input type="number" class="form-control" id="newPointScore" min="50" max="100" required>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-primary btns-click" onmouseup="insertReview()">Submit</button>
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
     <nav class="list-of-various-elements">
         <nav class="container-of-data list-group">
           <table class="table">

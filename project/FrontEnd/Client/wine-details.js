@@ -1,4 +1,6 @@
 var wineNameLocalStorage = localStorage.getItem('winery_name');
+var wineID;
+var username;
 
 
 // Send a request to the API for the wine with name: wineNameLocalStorage
@@ -81,34 +83,12 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
                     <li id="Point_Score" class="card-text"><i class="fa-solid fa-star"></i>&nbsp; <strong>Critic Score:</strong> &nbsp; ${data.pointScore}</li>
                     <br>
                     <br>
-                    <!-- ----------------------------Beginning Review------------------------------------- -->
-                    <!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Launch demo modal
-</button>
-
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Save changes</button>
-      </div>
-    </div>
-  </div>
-</div>
-                    <!-- ----------------------------End Review--------------------------------- -->
+                    
                     <p class="card-text"><small class="text-muted">Last updated 3 mins ago</small></p>
                 </div>
             </div>`;
+
+            wineID = data.wineID;
             populateReviews(data.wineID);
         } 
     };
@@ -120,46 +100,50 @@ const getWineDetails = function() { // MUST BE POST with type->SEARCH_WINE
 // Updating the Wine Details
 //getWineDetails();
 
-// onSubmit
+const getUsername = function(){
+    const req = new XMLHttpRequest;
 
-const onSubmit = function(e) {
-    e.preventDefault();
-    // Uncomment after implementing the form submission
-    // const points = document.getElementById("points").value;
-    // const review = document.getElementById("review").value;
-    // const username = document.getElementById("username").value;
-    // const wineID = localStorage.getItem('wineID')
-    // SubmitReview(points, review, username, wineID);
-}
+    req.onreadystatechange = function() {
+        if (req.readyState == 4 && req.status == 200) {
+            const res = req.responseText;
+            username = res;
+        }
+    }
 
-// const reviewForm = document.getElementById("reviewForm");
-// // Add the onSubmit event listener to the review form
-// reviewForm.addEventListener("submit", function(e) {
-//     onSubmit(e); // Pass the event object to onSubmit function
-// });
+    req.open('GET', '../Components/SessionHandler.php', false);
+    req.send();
+};
 
-const SubmitReview = function(points, review, username, wineID) {
-    const xhttpObject = new XMLHttpRequest();
+const insertReview = function() {
+    getUsername();
+    var points = document.getElementById("newPointScore").value;
+    var review = document.getElementById("newReviewText").value;
+
+    console.log("points: " + points + "\nreview: " + review);
+
+    var req = new XMLHttpRequest();
     const body = JSON.stringify({
         "type": `INSERT_REVIEW`,
-        "points": `${points}`,
-        "review": `${review}`,
-        "username": `${username}`,
-        "wineID": `${wineID}`
+        "points": points,
+        "review": review,
+        "username": username,
+        "wineID": wineID
     });
-    xhttpObject.onreadystatechange = function() {
-        if (xhttpObject.readyState === 4 && xhttpObject.status === 200){
-            var response = JSON.parse(xhttpObject.responseText);
-            if (response.status === 200) {
-                prependReview(data); // Array of review
+
+    req.onreadystatechange = function() {
+        if (req.readyState === 4 && req.status === 200){
+            
+            var res = req.responseText;
+            var jRes = JSON.parse(res);
+
+            if (jRes.status = "Success") {
+                location.reload();
             }
-        } else {
-            console.log("Request failed with status: " + xhttpObject.status);
         }
     };
-    xhttpObject.open("POST", "../../Backend/Api/Api.php", true);
-    xhttpObject.setRequestHeader("Content-type", "application/json");
-    xhttpObject.send(body);
+    req.open("POST", "../../Backend/Api/Api.php", true);
+    req.setRequestHeader("Content-type", "application/json");
+    req.send(body);
 }
 
 const openWinery = function(wineryID){
