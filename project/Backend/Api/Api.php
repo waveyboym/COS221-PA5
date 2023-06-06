@@ -104,6 +104,7 @@ class Api extends config{
         $hashedPass = hash("sha256", $UserPassword, false);
 
         $success = $stmt->execute(array($UserEmail, $hashedPass));
+
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if($success && $stmt->rowCount() != 0){
@@ -113,7 +114,7 @@ class Api extends config{
             $success = $stmt2->execute(array($userID));
 
             if($success && $stmt2->rowCount() != 0){
-                return $this->constructResponseObject($stmt->fetchAll(), "success");
+                return $this->constructResponseObject($row['username'], "success");
             }
             else{
                 return $this->constructResponseObject(ERRORTYPES::ISMANAGER->value, "error");
