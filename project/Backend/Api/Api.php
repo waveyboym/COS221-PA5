@@ -36,6 +36,10 @@ enum REQUESTYPE: string
     case OPEN_WINERY_ADMIN = 'OPEN_WINERY_ADMIN';
     case ADD_WINERY_ADMIN = 'ADD_WINERY_ADMIN';
     case DELETE_WINERY_ADMIN = 'DELETE_WINERY_ADMIN';
+    case OPEN_WINERY = 'OPEN_WINERY';
+    case OPEN_WINE = 'OPEN_WINE';
+    case LOAD_MORE_WINES = 'LOAD_MORE_WINES';
+    case GET_WINE_REVIEWS = 'GET_WINE_REVIEWS';
     /**Add more cases */
 }
 
@@ -105,7 +109,7 @@ class Api extends config{
 
     public function loginAdmin($AdminKey){
         $conn = $this->connectToDataBase();
-        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $stmt = $conn->prepare("SELECT adminkey FROM admin WHERE adminkey = ?;");
         $success = $stmt->execute(array($AdminKey));
 
         if($success && $stmt->rowCount() > 0){
@@ -297,6 +301,23 @@ class Api extends config{
         }
     }
 
+     // * Get Wine Reviews
+     public function getWineReviews($wineID){
+        $conn = $this->connectToDatabase();
+        $stmt = $conn->prepare('SELECT reviewID ,review_description, points, username FROM review JOIN user ON userID = reviewer_userID WHERE wineID = ?');
+        $success = $stmt->execute(array($wineID));
+
+        $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $json = json_encode($rows);
+        
+        if($stmt->rowCount() > 0){
+            return $this->constructResponseObject($rows, "success");
+        }
+        else{
+            return $this->constructResponseObject("", "error");
+        }
+    }
+
     public function getVarietals(){
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT varietal FROM wine GROUP BY varietal");
@@ -342,6 +363,7 @@ class Api extends config{
         //FILTERS
         $filterchecks = array('varietal'=>0, 'colour'=>0, 'carbonation'=>0, 'sweetness'=>0, 'country'=>0);
         $country = false;
+        $regionset = false;
         $WHERE_CLAUSES = array();
         $JOIN = "JOIN winery ON wine.wineryID = winery.wineryID JOIN location ON winery_locationID = location.locationID JOIN region ON region.regionID = location.regionID";
             
@@ -359,6 +381,11 @@ class Api extends config{
             if(isset($filters->country)){
                 $WHERE_CLAUSES[] = "region.country = :country";
                 $country = true;
+            }
+
+            if(isset($filters->region)){
+                $WHERE_CLAUSES[] = "region.region_name = :region";
+                $regionset = true;
             }
         }
         if(sizeof($WHERE_CLAUSES) != 0){
@@ -385,6 +412,9 @@ class Api extends config{
         }
         if($country == true){
             $stmt->bindParam(":country", $filters->country); 
+        }
+        if($regionset){
+            $stmt->bindParam(":region", $filters->region); 
         }
 
         $stmt->execute();
@@ -417,6 +447,23 @@ class Api extends config{
         $stmt->execute();
         $data = $stmt->fetchAll();
         return $this->constructResponseObject($data, "success", $lastcount + $pagesize);
+    }
+
+    public function openWine($id){
+        $conn = $this->connectToDatabase();
+        $stmt = $conn->prepare("SELECT * FROM winery JOIN location ON winery_locationID = location.locationID JOIN region ON location.regionID = region.regionID WHERE region.country LIKE 'South Africa' AND winery.wineryID = ?");
+        $stmt->execute(array($id));
+        $data = $stmt->fetchAll();
+
+        //get all reviews related to this wine
+        $stmt = $conn->prepare('SELECT count(*) AS total FROM review WHERE wineID = ?');
+        $stmt->execute(array($id));
+        $reviewsCount = $stmt->fetchColumn();
+
+        session_start();
+        $_SESSION["WineData"] = $data;
+        $_SESSION["ReviewsCount"] = $reviewsCount;
+        return $this->constructResponseObject("", "success");
     }
 
     public function getWineries($req_info){
@@ -469,7 +516,7 @@ class Api extends config{
         $name = strtolower($name);
         $name = "%" . $name . "%";
 
-        $FIELDS = "winery_name, winery_imageURL, description, winery_websiteURL, longitude, latitude, location.address AS address, region.region_name AS region, region.country AS country";
+        $FIELDS = "wineryID, winery_name, winery_imageURL, isVerified, description, winery_websiteURL, longitude, latitude, location.address AS address, region.region_name AS region, region.country AS country";
         $conn = $this->connectToDatabase();
         $stmt = $conn->prepare("SELECT $FIELDS FROM winery JOIN location ON winery_locationID = location.locationID JOIN region ON location.regionID = region.regionID WHERE LOWER(winery_name) LIKE :name");
         $stmt->bindParam(':name', $name);
@@ -479,12 +526,49 @@ class Api extends config{
         return $this->constructResponseObject($data, "success");
     }
 
+    public function getWinery($id){
+        $conn = $this->connectToDatabase();
+        $stmt = $conn->prepare("SELECT * FROM winery JOIN location ON winery_locationID = location.locationID JOIN region ON location.regionID = region.regionID WHERE winery.wineryID = ?");
+        $stmt->execute(array($id));
+        $data = $stmt->fetchAll();
+
+        $stmt = $conn->prepare('SELECT count(*) AS total FROM wine WHERE wineryID = ?');
+        $stmt->execute(array($id));
+        $wineCount = $stmt->fetchColumn();
+
+        $stmt = $conn->prepare('SELECT * FROM wine WHERE wineryID = ? LIMIT 10');
+        $stmt->execute(array($id));
+        $wines = $stmt->fetchAll();
+
+        session_start();
+        $_SESSION["WineryID"] = $id;
+        $_SESSION["WineryData"] = $data;
+        $_SESSION["WinesCount"] = $wineCount;
+        $_SESSION["Wines"] = $wines;
+        $_SESSION["Limit"] = 10;
+
+        return $this->constructResponseObject("", "success");
+    }
+
+    public function loadMoreWines(){
+        session_start();
+        $conn = $this->connectToDatabase();
+        $val = $_SESSION["Limit"];
+        $_SESSION["Limit"] = $val + 10;
+        $stmt = $conn->prepare('SELECT * FROM wine WHERE wineryID = ? LIMIT ' . $val + 10);
+        $stmt->execute(array($_SESSION["WineryID"]));
+        $wines = $stmt->fetchAll();
+
+        $_SESSION["Wines"] = $wines;
+        return $this->constructResponseObject($wines, "success");
+    }
+
     public function getWineriesORManagersAdmin($type, $last_id = 0){
         session_start();
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
 
         $conn = $this->connectToDataBase();
-        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $stmt = $conn->prepare("SELECT adminkey FROM admin WHERE adminkey = ?;");
         $success = $stmt->execute(array($adminkey));
 
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
@@ -544,12 +628,13 @@ class Api extends config{
         return $this->constructResponseObject("", "success");
     }
 
-    public function addWineryAdmin($data){
+    public function addWineryAdmin($wineryName, $wineryImageURL, $wineryWebsiteURL, 
+        $location, $country, $longitude, $latitude, $region, $wineryManagerID, $isverified, $description){
         session_start();
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
 
         $conn = $this->connectToDataBase();
-        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $stmt = $conn->prepare("SELECT adminkey FROM admin WHERE adminkey = ?;");
         $success = $stmt->execute(array($adminkey));
 
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
@@ -558,7 +643,7 @@ class Api extends config{
 
         /////////////////////////////COUNTRY
         $stmt = $conn->prepare("SELECT country FROM country WHERE country LIKE ?;");
-        $success = $stmt->execute(array($data->country));
+        $success = $stmt->execute(array($country));
         if($stmt->rowCount() > 0){
             $result = $stmt->fetchAll();
             foreach($result as $valuesToOutput){
@@ -568,15 +653,15 @@ class Api extends config{
         }
         else{
             $stmt = $conn->prepare("INSERT INTO country(country) VALUES(?);");
-            $success = $stmt->execute(array($data->country));
+            $success = $stmt->execute(array($country));
             if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
 
             $stmt = $conn->prepare("SELECT country FROM country WHERE country LIKE ?;");
-            $success = $stmt->execute(array($data->country));
+            $success = $stmt->execute(array($country));
             if($stmt->rowCount() > 0){
                 $result = $stmt->fetchAll();
                 foreach($result as $valuesToOutput){
-                    $country = $valuesToOutput['country'];
+                    $countryName = $valuesToOutput['country'];
                     break;
                 }
             }
@@ -585,7 +670,7 @@ class Api extends config{
 
         /////////////////////////REGION
         $stmt = $conn->prepare("SELECT regionID FROM region WHERE region_name LIKE ?;");
-        $success = $stmt->execute(array($data->region));
+        $success = $stmt->execute(array($region));
         if($stmt->rowCount() > 0){
             $result = $stmt->fetchAll();
             foreach($result as $valuesToOutput){
@@ -595,11 +680,11 @@ class Api extends config{
         }
         else{
             $stmt = $conn->prepare("INSERT INTO region(region_name, country) VALUES(?, ?);");
-            $success = $stmt->execute(array($data->region, $country));
+            $success = $stmt->execute(array($region, $countryName));
             if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
 
             $stmt = $conn->prepare("SELECT regionID FROM region WHERE region_name LIKE ?;");
-            $success = $stmt->execute(array($data->region));
+            $success = $stmt->execute(array($region));
             if($stmt->rowCount() > 0){
                 $result = $stmt->fetchAll();
                 foreach($result as $valuesToOutput){
@@ -612,7 +697,7 @@ class Api extends config{
 
         /////////////////////////LOCATION
         $stmt = $conn->prepare("SELECT locationID FROM location WHERE address LIKE ?;");
-        $success = $stmt->execute(array($data->location));
+        $success = $stmt->execute(array($location));
         if($stmt->rowCount() > 0){
             $result = $stmt->fetchAll();
             foreach($result as $valuesToOutput){
@@ -622,11 +707,11 @@ class Api extends config{
         }
         else{
             $stmt = $conn->prepare("INSERT INTO location(longitude, lattitude, address, regionID) VALUES(?, ?, ?, ?);");
-            $success = $stmt->execute(array($data->longitude, $data->latitude, $data->location, $regionid));
+            $success = $stmt->execute(array($longitude, $latitude, $location, $regionid));
             if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
 
             $stmt = $conn->prepare("SELECT locationID FROM location WHERE address LIKE ?;");
-            $success = $stmt->execute(array($data->location));
+            $success = $stmt->execute(array($location));
             if($stmt->rowCount() > 0){
                 $result = $stmt->fetchAll();
                 foreach($result as $valuesToOutput){
@@ -639,20 +724,20 @@ class Api extends config{
         
         //winery
 
-        if($data->wineryManagerID != null){
+        if($wineryManagerID != null){
             $stmt = $conn->prepare("INSERT INTO winery(winery_name, winery_imageURL, description, winery_websiteURL, winery_locationID, winery_manager, isVerified) VALUES(?,?,?,?,?,?,?);");
             $success = $stmt->execute(array(
-                $data->wineryName, $data->wineryImageURL, $data->description, 
-                $data->wineryWebsiteURL, $locationID, $data->wineryManagerID, $data->isverified));
+                $wineryName, $wineryImageURL, $description, 
+                $wineryWebsiteURL, $locationID, $wineryManagerID, $isverified == true ? 1 : 0));
         }
         else{
             $stmt = $conn->prepare("INSERT INTO winery(winery_name, winery_imageURL, description, winery_websiteURL, winery_locationID, isVerified) VALUES(?,?,?,?,?,?);");
             $success = $stmt->execute(array(
-                $data->wineryName, $data->wineryImageURL, $data->description, 
-                $data->wineryWebsiteURL, $locationID, $data->isverified));
+                $wineryName, $wineryImageURL, $description, 
+                $wineryWebsiteURL, $locationID, 0));
         }
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
-        else return $this->getWineriesORManagersAdmin(REQUESTYPE::GET_WINERY_ADMIN->value);
+        else return $this->constructResponseObject("Added new winery", "success");
     }
 
     public function deleteWineryAdmin($id){
@@ -660,7 +745,7 @@ class Api extends config{
         $adminkey = $_SESSION["adminkey"]; //adminkey should come from session variable
 
         $conn = $this->connectToDataBase();
-        $stmt = $conn->prepare("SELECT userID FROM winery_manager WHERE userID = ?;");
+        $stmt = $conn->prepare("SELECT adminkey FROM admin WHERE adminkey = ?;");
         $success = $stmt->execute(array($adminkey));
 
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
@@ -671,7 +756,7 @@ class Api extends config{
         $success = $stmt->execute(array($id));
 
         if(!$success)return $this->constructResponseObject("Database connection has failed, try again", "error");
-        return $this->getWineriesORManagersAdmin(REQUESTYPE::GET_WINERY_ADMIN->value);
+        return $this->constructResponseObject("deleted winery", "success");
     }
     
     /**
@@ -701,6 +786,9 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if($USERREQUEST->type == REQUESTYPE::REGISTER->value){
         echo $apiconfig->registerUser($USERREQUEST->username, $USERREQUEST->email, $USERREQUEST->password, $USERREQUEST->isSouthAfrican);
+    }
+    else if($USERREQUEST->type === REQUESTYPE::INSERT_REVIEW->value) {
+        echo $apiconfig->insertReview($USERREQUEST->points, $USERREQUEST->review, $USERREQUEST->username, $USERREQUEST->wineID);
     }
     else if($USERREQUEST->type == REQUESTYPE::LOGIN->value){
         echo $apiconfig->loginUser($USERREQUEST->email, $USERREQUEST->password);
@@ -758,6 +846,13 @@ if($_SERVER["REQUEST_METHOD"] == "POST"){
     else if($USERREQUEST->type == REQUESTYPE::OPEN_WINERY_ADMIN->value){
         echo $apiconfig->openManagersPage($USERREQUEST->managerID);
     }
+    else if($USERREQUEST->type == REQUESTYPE::ADD_WINERY_ADMIN->value){
+        echo $apiconfig->addWineryAdmin($USERREQUEST->wineryName, $USERREQUEST->wineryImageURL,
+            $USERREQUEST->wineryWebsiteURL, $USERREQUEST->location, $USERREQUEST->country,
+            $USERREQUEST->longitude, $USERREQUEST->latitude, $USERREQUEST->region,
+            $USERREQUEST->wineryManagerID, $USERREQUEST->isverified, $USERREQUEST->description
+        );
+    }
     else echo $json;
 }
 else if($_SERVER["REQUEST_METHOD"] == "GET"){
@@ -767,22 +862,31 @@ else if($_SERVER["REQUEST_METHOD"] == "GET"){
     else if($_GET['type'] == REQUESTYPE::GET_MANAGERS_ADMIN->value){
         echo $apiconfig->getWineriesORManagersAdmin(REQUESTYPE::GET_MANAGERS_ADMIN->value, isset($_GET['last_id']) ? $_GET['last_id'] : 0);
     }
-    else if($_GET['type'] == REQUESTYPE::ADD_WINERY_ADMIN->value){
-        echo $apiconfig->addWineryAdmin(array(
-            "wineryName" => $_GET['wineryName'],
-            "wineryImageURL" => $_GET['wineryImageURL'],
-            "wineryWebsiteURL" => $_GET['wineryWebsiteURL'],
-            "location" => $_GET['location'],
-            "country" => $_GET['country'],
-            "longitude" => $_GET['longitude'],
-            "latitude" => $_GET['latitude'],
-            "region" => $_GET['region'],
-            "wineryManagerID" => $_GET['wineryManagerID'],
-            "isverified" => $_GET['isverified'],
-            "description" => $_GET['description']
-        ));
-    }
     else if($_GET['type'] == REQUESTYPE::DELETE_WINERY_ADMIN->value){
         echo $apiconfig->deleteWineryAdmin($_GET['wineryID']);
+    }
+    else if($_GET['type'] == REQUESTYPE::GET_WINERIES->value){
+        echo $apiconfig->getWineries(array());
+    }
+    else if($_GET['type'] == REQUESTYPE::SEARCH_WINERY->value){
+        echo $apiconfig->searchWinery($_GET['name']);
+    }
+    else if($_GET['type'] == REQUESTYPE::OPEN_WINERY->value){
+        echo $apiconfig->getWinery($_GET['id']);
+    }
+    else if($_GET['type'] == REQUESTYPE::GET_WINE->value){
+        echo $apiconfig->getWines(isset($_GET['lastcount']) ? array("lastcount" => $_GET['lastcount']) : array());
+    }
+    else if($_GET['type'] == REQUESTYPE::SEARCH_WINE->value){
+        echo $apiconfig->searchWine($_GET['name'], isset($_GET['lastcount']) ? $_GET['lastcount'] : 0);
+    }
+    else if($_GET['type'] == REQUESTYPE::OPEN_WINE->value){
+        echo $apiconfig->openWine($_GET['id']);
+    }
+    else if($_GET['type'] == REQUESTYPE::LOAD_MORE_WINES->value){
+        echo $apiconfig->loadMoreWines();
+    }
+    else if($_GET['type'] == REQUESTYPE::GET_WINE_REVIEWS->value){
+        echo $apiconfig->getWineReviews($_GET['wineID']);
     }
 }

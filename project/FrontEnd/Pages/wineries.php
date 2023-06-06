@@ -23,130 +23,18 @@
         <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" data-bs-toggle="modal" data-bs-target="#exampleModal">
           <i class="fa-solid fa-filter pe-2"></i>filters
         </div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Cape Town</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Port Elizabeth</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Durban</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Johannesburg</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Pretoria</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">East London</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Pietermaritzburg</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons">Bloemfontein</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" onmouseup="getAllLocations()">All locations</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt1">Cape Town</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons"id="opt2">Port Elizabeth</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt3">Durban</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt4">Johannesburg</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt5">Pretoria</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt6">East London</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt7">Pietermaritzburg</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" id="opt8">Bloemfontein</div>
       </div>
     </nav>
-    <nav class="website-container d-flex justify-content-evenly flex-wrap align-items-center overflow-y-auto">
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://media.istockphoto.com/id/978754758/photo/vineyard-sunset.jpg?s=612x612&w=0&k=20&c=xvJZ_Ldp_n_Ev0LjaNY_vgrLvdB_dBrT8SdRfPn6zd0=" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://res.akamaized.net/domain/image/upload/t_web/c_crop,h_393,w_627,x_150,y_53/v1631241636/118115-56_ama7b5.jpg" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://parissiswinery.com/wp-content/uploads/2022/01/parissis_winery_skiathos_greece-1.jpg" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://images.squarespace-cdn.com/content/v1/5c3cdd80c258b408c8f871c9/1637010787400-UYMKKSY0BO52T540YXK6/D1BDE42D-EAE9-4588-BC33-2C17E0CA8895_1_105_c.jpeg?format=2500w" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://marylandwine.com/wp-content/uploads/2016/07/mdwine-winery-640x360.jpg" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://cdn.shopify.com/s/files/1/0475/7743/2217/files/home-hill-winery-2021-FB_00ce056b-cc75-4f40-968c-50cbb09f402b.jpg?v=1623201223" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://bplakecc.wpenginepowered.com/wp-content/uploads/2023/04/32431807_web1_230420-SUM-Sumac-closing-SUMMERLAND_1.jpg" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-      <div class="card card-item rounded-2" style="width: 18rem;">
-        <div class="img-container">
-          <img class="card-img-top" src="https://assets.simpleviewinc.com/simpleview/image/upload/c_limit,h_1200,q_75,w_1200/v1/clients/temecula/97aabe43407fcaa7e2c42ffe0db13936cf1f49f5aa290eed11c4055f5ffaaeac_06b79738-8707-40c7-a731-58ba4bcd799e.jpg" alt="Card image cap">
-        </div>
-        <div class="card-body">
-          <h5 class="card-title">Hatfield</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-        </div>
-        <ul class="list-group list-group-flush">
-          <li class="list-group-item">Rating: 4.5★</li>
-          <li class="list-group-item">Open Days: Mon - Fri</li>
-          <li class="list-group-item">Open times: 8am - 4pm</li>
-        </ul>
-      </div>
-    </nav>
+    <nav class="website-container overflow-y-auto  mb-3 pt-3 pb-3"></nav>
 
     <!-- filter tab -->
     <div class="modal fade modal-dialog-scrollable" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -157,12 +45,6 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <h6 class="text-dark">Price ranges</h6>
-            <label for="customRange1" class="form-label text-dark">Min price for wines sold at winery: $2000</label>
-            <input type="range" class="form-range" id="customRange2">
-            <label for="customRange1" class="form-label text-dark">Max price for wines sold at winery: $5000</label>
-            <input type="range" class="form-range" id="customRange1">
-
             <div class="filter-modal-buffer"></div>
             <h6 class="text-dark">Locations</h6>
             <div class="form-check form-check-inline">
@@ -206,8 +88,8 @@
             <input type="text" class="form-control" id="enteredLocation" placeholder="Enter location here">
           </div>
           <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn" style="background-color: var(--app-theme-col);">Update filters</button>
+            <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btns-click" style="background-color: var(--app-theme-col);">Update filters</button>
           </div>
         </div>
       </div>
