@@ -132,7 +132,7 @@
             </div>
             <br>
             <br>
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="CountrySelect">
               <option selected>Country</option>
               <option value="1">Italy</option>
               <option value="2">South Africa</option>
