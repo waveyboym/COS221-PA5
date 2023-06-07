@@ -137,15 +137,6 @@ $(document).ready(function(){
     $("#opt5").click(()=>{
         FilterSearch("#opt5")
     })
-    $("#opt6").click(()=>{
-        FilterSearch("#opt6")
-    })
-    $("#opt7").click(()=>{
-        FilterSearch("#opt7")
-    })
-    $("#opt8").click(()=>{
-        FilterSearch("#opt8")
-    })
         
     
 });
@@ -185,23 +176,20 @@ function FilterCheck(str){     /////Function for filtering takes in the number t
 
 function FilterSearch(name)
 {
-    switchOnLoader();
+
 
     NotFound= false;
-    var index = FilterCheck($(name).html())
-    console.log(index);
+    var Country = $(name).html()
+    console.log(Country);
     var body = {
         type : 'GET_WINERIES',
-        location : {
-            latitude : Places[index].latitude,
-            longitude : Places[index].longitude
-        }
+        filtercountry : Country
     }
     var xhr = new XMLHttpRequest();
     xhr.onreadystatechange= function(){
         if(this.readyState == 4 && this.status == 200)
         {
-            switchOffLoader();
+
             document.querySelector(".website-container").innerHTML = "";
             console.log("Before data populated")
             placeWineryElements(this.responseText);
