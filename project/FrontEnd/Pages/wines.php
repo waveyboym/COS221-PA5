@@ -31,8 +31,7 @@
         <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >Bone Dry</div>
         <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >White</div>
         <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >Sparkling</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >Bordeaux</div>
-        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >Champagne</div>
+        <div class="ms-3 btn btn-light btn-rounded rounded-4 border border-dark-subtle filter-buttons" >Still</div>
       </div>
     </nav>
     <!-- ----------------------------Tab END --------------------------------------- -->
@@ -58,37 +57,28 @@
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <h6 class="text-dark">Sort by rating:</h6>
-            <!-- <label for="customRange2" class="form-label">Rating</label> -->
-            <input type="range" class="form-range" min="0" max="5" id="customRange2">
-
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-              <option selected>Varietal</option>
-              <option value="1">Chardonnay</option>
-              <option value="2">Cabernet Sauvignon</option>
-            </select>
             <br>
 
-            <select class="form-select form-select-sm" aria-label=".form-select-sm example">
-              <option selected>Color</option>
-              <option value="1">Red</option>
-              <option value="2">White</option>
-              <option value="3">Rosé</option>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="ColourSelect">
+              <option selected>Colour</option>
+              <option value="Red">Red</option>
+              <option value="White">White</option>
+              <option value="Rose">Rosé</option>
             </select>
             <br>
 
             <div class="filter-modal-buffer"></div>
             <h6 class="text-dark">Carbonation:</h6>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
+              <input class="form-check-input" type="radio" name="carbonation" id="inlineCheckbox1" value="Sparkling">
               <label class="form-check-label text-dark" for="inlineCheckbox1">Sparkling</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+              <input class="form-check-input" type="radio" name="carbonation" id="inlineCheckbox2" value="Semi-Sparkling">
               <label class="form-check-label text-dark" for="inlineCheckbox2">Semi-sparkling</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+              <input class="form-check-input" type="radio" name="carbonation" id="inlineCheckbox3" value="Still">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Still</label>
             </div>
             <br>
@@ -97,62 +87,64 @@
             <div class="filter-modal-buffer"></div>
             <h6 class="text-dark">Sweetness:</h6>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox1" value="option1">
-              <label class="form-check-label text-dark" for="inlineCheckbox1">All</label>
+          
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox2" value="option2">
+              <input class="form-check-input" type="radio" name="Sweetness" id="inlineCheckbox2" value="Bone Dry">
               <label class="form-check-label text-dark" for="inlineCheckbox2">Bone Dry</label>
             </div>
 
 
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox3" value="option3">
+              <input class="form-check-input" type="radio" name="Sweetness" id="inlineCheckbox3" value="Dry">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Dry</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox4" value="option4">
+              <input class="form-check-input" type="radio" name="Sweetness" id="inlineCheckbox4" value="Medium/off Dry">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Medium/Off Dry</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox5" value="option5">
+              <input class="form-check-input" type="radio" name="Sweetness" id="inlineCheckbox5" value="Medium Sweet">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Medium Sweet</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox6" value="option6">
+              <input class="form-check-input" type="radio" name="Sweetness" id="inlineCheckbox6" value="Dessert Sweetness">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Dessert Sweetness</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox7" value="option7">
+              <input class="form-check-input" type="radio" id="inlineCheckbox7" value="Very Sweet">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Very Sweet</label>
             </div>
             <div class="form-check form-check-inline">
-              <input class="form-check-input" type="checkbox" id="inlineCheckbox8" value="option8">
+              <input class="form-check-input" type="radio" id="inlineCheckbox8" value="Intensely Sweet">
               <label class="form-check-label text-dark" for="inlineCheckbox3">Intensely Sweet</label>
             </div>
             <br>
             <br>
             <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="CountrySelect">
               <option selected>Country</option>
-              <option value="1">Italy</option>
-              <option value="2">South Africa</option>
-              <option value="3">France</option>
-              <option value="4">Germany</option>
-              <option value="5">Spain</option>
-              <option value="6">Portugal</option>
-              <option value="7">Russia</option>
-              <option value="8">Turkey</option>
+              <option value="Italy">Italy</option>
+              <option value="South Africa">South Africa</option>
+              <option value="France">France</option>
+              <option value="Spain">Spain</option>
+              <option value="United States">United States</option>
+            </select>
+            <br>
+            <select class="form-select form-select-sm" aria-label=".form-select-sm example" id="SortBySelect">
+              <option selected>Sort By</option>
+              <option value="pointScore">Score</option>
+              <option value="alcohol_percentage">Alchol Percentage</option>
+              <option value="year_bottled">Year Bottled</option>
+              <option value="vintage">Vintage</option>
             </select>
 
             <br>
             <div class="filter-modal-buffer"></div>
             <br>
-            <h6 class="text-dark enteredLocation">Enter a country of Wine's origin :</h6>
-            <input type="text" class="form-control" id="enteredLocation" placeholder="Enter country here">
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary btns-click-gray" data-bs-dismiss="modal">Close</button>
-            <button type="button" class="btn btns-click" style="background-color: var(--app-theme-col);">Update filters</button>
+            <button type="button" class="btn btns-click" style="background-color: var(--app-theme-col);" id="UpdateFilters" >Update filters</button>
           </div>
         </div>
       </div>
