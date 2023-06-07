@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-A winery website for tourists to view and make use of when trying to browse a selection of wines and make reviews of wines at different wineries in South Africa  and countries outside of South Africa
+A winery website for tourists to view and make use of when trying to browse a selection of wines and make reviews of wines at different wineries in South Africa  and countries outside of South Africa 
 
 # Setup
 1. Download and install XAMPP
