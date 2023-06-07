@@ -1,5 +1,11 @@
 let lastServedID = "";
 let searchval = "";
+var Country = "";
+var Carbonation = "";
+var Colour = "";
+var Sweetness = "";
+var Filterstring = "";
+var Sort = "";
 
 window.onload = function(){
     const xhttpObject = new XMLHttpRequest();
@@ -153,61 +159,128 @@ $(document).ready(function(){
         console.log("Insideee");
         var typeWine = $(this).html();
         console.log(typeWine);
-        var body = KnowFilter(typeWine);
-        console.log(JSON.stringify(body));
-        var xhr = new XMLHttpRequest();
-        xhr.onreadystatechange = function()
+        if(typeWine == "Red" || typeWine == "White" || typeWine == "Bone Dry" || typeWine == "Sparkling"|| typeWine == "Still" || typeWine == "Champagne")
         {
-            if(this.readyState== 4 && this.status == 200)
+            var body = KnowFilter(typeWine);
+            console.log(JSON.stringify(body));
+            var xhr = new XMLHttpRequest();
+            xhr.onreadystatechange = function()
             {
-                document.querySelector(".website-container").innerHTML = "";
-                placeWineElements(this.responseText);
+                if(this.readyState== 4 && this.status == 200)
+                {
+                    document.querySelector(".website-container").innerHTML = "";
+                    placeWineElements(this.responseText);
+                }
             }
+
+            xhr.open("POST","../../Backend/Api/Api.php")
+            xhr.send(JSON.stringify(body));
         }
 
-        xhr.open("POST","../../Backend/Api/Api.php")
-        xhr.send(JSON.stringify(body));
     })
-
+ ////////////////Country Select flter
     $("#CountrySelect").on("change",function(){
-        var Option = $(this).val();
-        var Country = ''
-        switch (Option) {
-            case "1":
-                Country = "Italy";
-                break;
-            case "2":
-                Country = "South Africa";
-                break;
-            case "3":
-                Country = "France";
-                break;
-            case "4":
-                Country = "Germany";
-                break;
-            case "5":
-                Country = "Spain";
-                break;
-            case "6":
-                Country = "Portugal";
-                break;
-            case "7":
-                Country = "Russia";
-                break;
-            case "8":
-                Country = "Turkey";
-                break;
-        
-        }
+        Country = $(this).val();
+        console.log("Country : " + Country);
+        if(Filterstring == "")
+        Filterstring = '{country : ' + Country + ' ';
+        else Filterstring = Filterstring + ' , country : ' + Country + ' ';
         var Sbody = {
             type : "GET_WINE",
             filters : { country : Country}
         }
+        // var xhr = new XMLHttpRequest();
+        // xhr.onreadystatechange = function()
+        // {
+        //     if(this.readyState== 4 && this.status == 200)
+        //     {
+        //         document.querySelector(".website-container").innerHTML = "";
+        //         placeWineElements(this.responseText);
+        //     }
+        // }
+
+        // xhr.open("POST","../../Backend/Api/Api.php")
+        // xhr.send(JSON.stringify(Sbody));
+
+    })
+ ///////////////////////////////////Carbonation filter
+    const carbonationRadios = document.querySelectorAll('input[name="carbonation"]');
+  
+    carbonationRadios.forEach(function(radioButton) {
+        radioButton.addEventListener('change', function() {
+            Carbonation = this.value;
+            console.log("Carbonation : " + Carbonation)
+            if(Filterstring == "")
+            Filterstring = '{carbonation : ' + Carbonation + '';
+            else Filterstring = Filterstring + ' , carbonation : ' + Carbonation + ' ';
+        });
+    })
+
+  ////////////////////////////////Sweetness
+    const SweetRadioB = document.querySelectorAll('input[name="Sweetness"]');
+  
+    SweetRadioB.forEach(function(radioButton) {
+        radioButton.addEventListener('change', function() {
+            Sweetness = this.value;
+            console.log("Sweetness : " + Sweetness);
+            if(Filterstring == "")
+            Filterstring = '{sweetness : ' + Sweetness + ' ';
+            else Filterstring = Filterstring + ' , sweetness : ' + Sweetness + ' ';
+        });
+    })
+
+
+ //////////////////////////////////Colour Select
+    $("#ColourSelect").on("change",function(){
+        Colour = $(this).val();
+        console.log("Colour : " + Colour);
+        if(Filterstring == "")
+        Filterstring = '{colour : ' + Colour + ' ';
+        else Filterstring = Filterstring + ' , colour : ' + Colour + ' ';
+    })
+
+
+ 
+    $("#SortBySelect").on("change",function(){
+        Sort = $(this).val();
+        console.log("Sort : " + Colour);
+        if(Filterstring == "")
+        Filterstring = '{colour : ' + Colour + ' ';
+        else Filterstring = Filterstring + ' , colour : ' + Colour + ' ';
+    })
+    
+    $("#UpdateFilters").click(function(){
+        
+        var Sbody;
+        console.log("Sort: " + Sort);
+        if(Sort == "")
+        {
+            Sbody = {
+                type : "GET_WINE",
+                filters : {}
+            }
+        }
+        else 
+        {
+            Sbody = {
+                type : "GET_WINE",
+                sort : Sort,
+                filters : {}
+            }
+        }
+
+
+
+
+        BodyFilter(Sbody.filters);
+
+        console.log(Sbody);
         var xhr = new XMLHttpRequest();
         xhr.onreadystatechange = function()
         {
             if(this.readyState== 4 && this.status == 200)
             {
+                console.log("Inside post");
                 document.querySelector(".website-container").innerHTML = "";
                 placeWineElements(this.responseText);
             }
@@ -216,7 +289,10 @@ $(document).ready(function(){
         xhr.open("POST","../../Backend/Api/Api.php")
         xhr.send(JSON.stringify(Sbody));
 
+        
+
     })
+
 })
 
 function KnowFilter(str)
@@ -229,11 +305,11 @@ function KnowFilter(str)
             filters : {colour : str}
         }
     }
-    else if(str == "Bone Dry" || str == "Sparkling")
+    else if(str == "Bone Dry")
     {
         Pbody = {
             type : "GET_WINE",
-            filters : {carbonation : str}
+            filters : {sweetness : str}
         }
     }
     else if(str == "Bordeaux" || str== "Champagne")
@@ -243,7 +319,34 @@ function KnowFilter(str)
             filters : {varietal : str}
         }
     }
+    else if(str == "Sparkling" || str == "Still")
+    {
+        Pbody = {
+            type : "GET_WINE",
+            filters : {carbonation : str}
+        }
+    }
 
     return Pbody;
 
+}
+
+function BodyFilter(filter)
+{
+    if(Country != "")
+    {
+        filter.country = Country;
+    }
+    if(Carbonation != "")
+    {
+        filter.carbonation = Carbonation;
+    }
+    if(Sweetness != "")
+    {
+        filter.sweetness = Sweetness;
+    }
+    if(Colour)
+    {
+        filter.colour = Colour;
+    }
 }
