@@ -2,7 +2,7 @@
 <!-- ALL-CONTRIBUTORS-BADGE:START - Do not remove or modify this section -->
 [![All Contributors](https://img.shields.io/badge/all_contributors-7-orange.svg?style=flat-square)](#contributors-)
 <!-- ALL-CONTRIBUTORS-BADGE:END -->
-A winery website for tourists to view and make use of when trying to browse a selection of wines in South Africa
+A winery website for tourists to view and make use of when trying to browse a selection of wines and make reviews of wines at different wineries in South Africa  and countries outside of South Africa
 
 # Setup
 1. Download and install XAMPP
@@ -19,8 +19,12 @@ email: cherie.vasil@gmail.com
 password: FWAIPNvpipiwnaFOCNAIPWFNow218948612*&&8200
 ```
 
-# Packages and frameworks used
+# Packages, frameworks and Languages used
 1. <a href="https://getbootstrap.com/">Bootstrap</a>
+2. <a href="https://www.javascript.com/">Javascript</a>
+3. <a href="https://www.php.net/">PHP</a>
+4. <a href="https://www.w3.org/html/">HTML</a>
+5. <a href="https://www.w3.org/Style/CSS/Overview.en.html">CSS</a>
 
 # Contributors
 
