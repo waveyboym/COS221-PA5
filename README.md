@@ -15,8 +15,8 @@ A winery website for tourists to view and make use of when trying to browse a se
 8. The index page should show up
 9. The default login details are as follows:
 ```
-email: //enter here
-password: //enter here
+email: cherie.vasil@gmail.com
+password: FWAIPNvpipiwnaFOCNAIPWFNow218948612*&&8200
 ```
 
 # Packages and frameworks used
@@ -55,8 +55,12 @@ password: //enter here
  1. Initial setup and design of backend and continued design of frontend and research
 
 ## Week of 28/5 - 4/6
- 1. Completeion of frontend, conversion of files to php and beginning integration of dynamic data from backennd
+ 1. Completeion of frontend, conversion of files to php and beginning integration of dynamic data from backend
  2. Testing of website
+
+## Week of 5/6 - 7/6
+ 1. Completeion of backend, testing and final touchups of website
+ 2. Finalisation of report and submission of project files
 
 ## Contributors ✨
 
