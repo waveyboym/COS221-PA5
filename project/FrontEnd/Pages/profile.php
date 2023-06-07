@@ -36,7 +36,7 @@
           <div class="card-body">
             <h5 class="card-title">Password</h5>
             <div class="card-icon-and-count">
-              <i class="fa-regular fa-eye-slash pe-3" style="font-size: 1.5rem;"></i>
+            <i class="fa-solid fa-lock pe-3" style="font-size: 1.5rem;"></i>
               <h2 class="card-text">**********</h2>
             </div>
           </div>
