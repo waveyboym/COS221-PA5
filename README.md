@@ -63,7 +63,7 @@ password: FWAIPNvpipiwnaFOCNAIPWFNow218948612*&&8200
  2. Testing of website
 
 ## Week of 5/6 - 7/6
- 1. Completeion of backend, testing and final touchups of website
+ 1. Completion of backend, testing and final touchups of website
  2. Finalisation of report and submission of project files
 
 ## Contributors ✨
